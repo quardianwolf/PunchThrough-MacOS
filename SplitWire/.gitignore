@@ -1,0 +1,54 @@
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+*.xcworkspace
+!*.xcworkspace/contents.xcworkspacedata
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+Packages/
+Package.resolved
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Debug logs
+*.log
+splitwire_debug.log
+spoofdpi_stdout.log
+spoofdpi_stderr.log
+
+# Claude
+CLAUDE.md
+claude.md
+.claude/
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# Secrets
+*.env
+*.pem
+*.key

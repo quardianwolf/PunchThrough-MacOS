@@ -1,0 +1,49 @@
+/* General */
+"Connected" = "Bağlandı";
+"Connecting..." = "Bağlanıyor...";
+"Disconnecting..." = "Bağlantı kesiliyor...";
+"Disconnected" = "Bağlantı kesildi";
+"Error: %@" = "Hata: %@";
+"Connect" = "Bağlan";
+"Disconnect" = "Bağlantıyı Kes";
+
+/* Menu */
+"Method:" = "Yöntem:";
+"Settings..." = "Ayarlar...";
+"Quit SplitWire" = "SplitWire'dan Çık";
+
+/* Settings - General */
+"General" = "Genel";
+"Bypass" = "Bypass";
+"Logs" = "Günlükler";
+"Startup" = "Başlangıç";
+"Launch at Login" = "Giriş Yapınca Başlat";
+"Connection" = "Bağlantı";
+"Status" = "Durum";
+"Method" = "Yöntem";
+"DNS" = "DNS";
+"About" = "Hakkında";
+"GitHub Repository" = "GitHub Deposu";
+
+/* Settings - Bypass */
+"Bypass Method" = "Bypass Yöntemi";
+"DNS Server" = "DNS Sunucusu";
+"Custom" = "Özel";
+"Custom DNS" = "Özel DNS";
+"Use DNS over HTTPS (DoH)" = "DNS over HTTPS (DoH) Kullan";
+"Port" = "Port";
+"Configure System Proxy" = "Sistem Proxy'sini Yapılandır";
+"System proxy will route traffic through SpoofDPI automatically." = "Sistem proxy'si trafiği otomatik olarak SpoofDPI üzerinden yönlendirecektir.";
+"Installation Status" = "Kurulum Durumu";
+"Installed" = "Kurulu";
+"Not Installed" = "Kurulu Değil";
+"Optional" = "İsteğe Bağlı";
+
+/* Settings - Logs */
+"No Logs" = "Günlük Yok";
+"Connection logs will appear here." = "Bağlantı günlükleri burada görünecektir.";
+"Clear Logs" = "Günlükleri Temizle";
+
+/* Bypass Methods */
+"Lightweight DPI bypass proxy. Recommended for most users." = "Hafif DPI bypass proxy'si. Çoğu kullanıcı için önerilir.";
+"Advanced DPI bypass with multiple strategies. For complex filtering." = "Çoklu strateji ile gelişmiş DPI bypass. Karmaşık filtreleme için.";

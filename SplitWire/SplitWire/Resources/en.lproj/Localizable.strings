@@ -1,0 +1,49 @@
+/* General */
+"Connected" = "Connected";
+"Connecting..." = "Connecting...";
+"Disconnecting..." = "Disconnecting...";
+"Disconnected" = "Disconnected";
+"Error: %@" = "Error: %@";
+"Connect" = "Connect";
+"Disconnect" = "Disconnect";
+
+/* Menu */
+"Method:" = "Method:";
+"Settings..." = "Settings...";
+"Quit SplitWire" = "Quit SplitWire";
+
+/* Settings - General */
+"General" = "General";
+"Bypass" = "Bypass";
+"Logs" = "Logs";
+"Startup" = "Startup";
+"Launch at Login" = "Launch at Login";
+"Connection" = "Connection";
+"Status" = "Status";
+"Method" = "Method";
+"DNS" = "DNS";
+"About" = "About";
+"GitHub Repository" = "GitHub Repository";
+
+/* Settings - Bypass */
+"Bypass Method" = "Bypass Method";
+"DNS Server" = "DNS Server";
+"Custom" = "Custom";
+"Custom DNS" = "Custom DNS";
+"Use DNS over HTTPS (DoH)" = "Use DNS over HTTPS (DoH)";
+"Port" = "Port";
+"Configure System Proxy" = "Configure System Proxy";
+"System proxy will route traffic through SpoofDPI automatically." = "System proxy will route traffic through SpoofDPI automatically.";
+"Installation Status" = "Installation Status";
+"Installed" = "Installed";
+"Not Installed" = "Not Installed";
+"Optional" = "Optional";
+
+/* Settings - Logs */
+"No Logs" = "No Logs";
+"Connection logs will appear here." = "Connection logs will appear here.";
+"Clear Logs" = "Clear Logs";
+
+/* Bypass Methods */
+"Lightweight DPI bypass proxy. Recommended for most users." = "Lightweight DPI bypass proxy. Recommended for most users.";
+"Advanced DPI bypass with multiple strategies. For complex filtering." = "Advanced DPI bypass with multiple strategies. For complex filtering.";

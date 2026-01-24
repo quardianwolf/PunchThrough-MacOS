@@ -1,0 +1,424 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		001A0001289A0001 /* SplitWireApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0002289A0001; };
+		001A0003289A0001 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0004289A0001; };
+		001A0005289A0001 /* BypassMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0006289A0001; };
+		001A0007289A0001 /* ConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0008289A0001; };
+		001A0009289A0001 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A000A289A0001; };
+		001A000B289A0001 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A000C289A0001; };
+		001A000D289A0001 /* StatusIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A000E289A0001; };
+		001A000F289A0001 /* BypassService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0010289A0001; };
+		001A0011289A0001 /* ProcessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0012289A0001; };
+		001A0013289A0001 /* SpoofDPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0014289A0001; };
+		001A0017289A0001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 001A0018289A0001; };
+		001A001C289A0001 /* HelperConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A001D289A0001; };
+		001A001E289A0001 /* HelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A001F289A0001; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		001A0000289A0000 /* SplitWire.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SplitWire.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		001A0002289A0001 /* SplitWireApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitWireApp.swift; sourceTree = "<group>"; };
+		001A0004289A0001 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		001A0006289A0001 /* BypassMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BypassMethod.swift; sourceTree = "<group>"; };
+		001A0008289A0001 /* ConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionStatus.swift; sourceTree = "<group>"; };
+		001A000A289A0001 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		001A000C289A0001 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		001A000E289A0001 /* StatusIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusIndicator.swift; sourceTree = "<group>"; };
+		001A0010289A0001 /* BypassService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BypassService.swift; sourceTree = "<group>"; };
+		001A0012289A0001 /* ProcessManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessManager.swift; sourceTree = "<group>"; };
+		001A0014289A0001 /* SpoofDPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpoofDPIService.swift; sourceTree = "<group>"; };
+		001A0019289A0001 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		001A001A289A0001 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		001A001B289A0001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		001A001D289A0001 /* HelperConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperConnection.swift; sourceTree = "<group>"; };
+		001A001F289A0001 /* HelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HelperProtocol.swift; path = SplitWireHelper/HelperProtocol.swift; sourceTree = SOURCE_ROOT; };
+		001A0020289A0001 /* SplitWire.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SplitWire.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		001AFFF0289A0000 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		001AFFF1289A0000 = {
+			isa = PBXGroup;
+			children = (
+				001AFFF2289A0000 /* SplitWire */,
+				001AFFF3289A0000 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		001AFFF2289A0000 /* SplitWire */ = {
+			isa = PBXGroup;
+			children = (
+				001A0002289A0001 /* SplitWireApp.swift */,
+				001A001B289A0001 /* Info.plist */,
+				001A0020289A0001 /* SplitWire.entitlements */,
+				001AFFF4289A0000 /* Models */,
+				001AFFF5289A0000 /* Views */,
+				001AFFF6289A0000 /* Services */,
+				001AFFF7289A0000 /* Resources */,
+			);
+			path = SplitWire;
+			sourceTree = "<group>";
+		};
+		001AFFF3289A0000 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				001A0000289A0000 /* SplitWire.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		001AFFF4289A0000 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				001A0004289A0001 /* AppState.swift */,
+				001A0006289A0001 /* BypassMethod.swift */,
+				001A0008289A0001 /* ConnectionStatus.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		001AFFF5289A0000 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				001A000A289A0001 /* MenuBarView.swift */,
+				001A000C289A0001 /* SettingsView.swift */,
+				001A000E289A0001 /* StatusIndicator.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		001AFFF6289A0000 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				001A0010289A0001 /* BypassService.swift */,
+				001A0012289A0001 /* ProcessManager.swift */,
+				001A0014289A0001 /* SpoofDPIService.swift */,
+				001A001D289A0001 /* HelperConnection.swift */,
+				001A001F289A0001 /* HelperProtocol.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		001AFFF7289A0000 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				001A0018289A0001 /* Localizable.strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		001AFFF8289A0000 /* SplitWire */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 001AFFFC289A0000 /* Build configuration list for PBXNativeTarget "SplitWire" */;
+			buildPhases = (
+				001AFFFA289A0000 /* Sources */,
+				001AFFF0289A0000 /* Frameworks */,
+				001AFFFB289A0000 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SplitWire;
+			productName = SplitWire;
+			productReference = 001A0000289A0000 /* SplitWire.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		001AFFFD289A0000 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					001AFFF8289A0000 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 001AFFFE289A0000 /* Build configuration list for PBXProject "SplitWire" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				tr,
+			);
+			mainGroup = 001AFFF1289A0000;
+			productRefGroup = 001AFFF3289A0000 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				001AFFF8289A0000 /* SplitWire */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		001AFFFB289A0000 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				001A0017289A0001 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		001AFFFA289A0000 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				001A0001289A0001 /* SplitWireApp.swift in Sources */,
+				001A0003289A0001 /* AppState.swift in Sources */,
+				001A0005289A0001 /* BypassMethod.swift in Sources */,
+				001A0007289A0001 /* ConnectionStatus.swift in Sources */,
+				001A0009289A0001 /* MenuBarView.swift in Sources */,
+				001A000B289A0001 /* SettingsView.swift in Sources */,
+				001A000D289A0001 /* StatusIndicator.swift in Sources */,
+				001A000F289A0001 /* BypassService.swift in Sources */,
+				001A0011289A0001 /* ProcessManager.swift in Sources */,
+				001A0013289A0001 /* SpoofDPIService.swift in Sources */,
+				001A001C289A0001 /* HelperConnection.swift in Sources */,
+				001A001E289A0001 /* HelperProtocol.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		001A0018289A0001 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				001A0019289A0001 /* en */,
+				001A001A289A0001 /* tr */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		001AFFFF289A0000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		001B0000289A0000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		001B0001289A0000 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SplitWire/SplitWire.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SplitWire/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.splitwire.macos;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		001B0002289A0000 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SplitWire/SplitWire.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SplitWire/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.splitwire.macos;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		001AFFFC289A0000 /* Build configuration list for PBXNativeTarget "SplitWire" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				001B0001289A0000 /* Debug */,
+				001B0002289A0000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		001AFFFE289A0000 /* Build configuration list for PBXProject "SplitWire" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				001AFFFF289A0000 /* Debug */,
+				001B0000289A0000 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 001AFFFD289A0000 /* Project object */;
+}
