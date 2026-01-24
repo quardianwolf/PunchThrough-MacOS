@@ -2,6 +2,10 @@
 
 A native macOS menu bar application for managing DPI (Deep Packet Inspection) bypass tools. This is the macOS port of the Windows SplitWire-Turkey application.
 
+## NOTE
+
+You might receive an update error the first time Discord opens; please wait. It will log you in on the second update attempt (after 10 seconds).
+
 ## Features
 
 - **Menu Bar App**: Unobtrusive status bar icon with quick access to controls
