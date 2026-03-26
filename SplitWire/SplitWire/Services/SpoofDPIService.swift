@@ -79,7 +79,9 @@ actor SpoofDPIService {
             "--listen-addr", "127.0.0.1:\(port)",
             "--dns-addr", "\(dnsAddress):53",
             "--https-disorder",
-            "--https-chunk-size", "1"
+            "--https-chunk-size", "1",
+            "--https-split-mode", "random",
+            "--policy-auto"
         ]
 
         if enableDoH {
