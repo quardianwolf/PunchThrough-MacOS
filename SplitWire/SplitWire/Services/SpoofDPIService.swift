@@ -1,4 +1,5 @@
 import Foundation
+import Darwin
 
 /// Service for managing SpoofDPI process
 actor SpoofDPIService {
@@ -121,30 +122,56 @@ actor SpoofDPIService {
             throw SpoofDPIError.failedToStart
         }
 
-        // Wait for process to initialize
-        log("Waiting 1 second for process to initialize...")
-        try await Task.sleep(for: .seconds(1))
+        // Wait for process to initialize and verify it's actually listening
+        log("Waiting for SpoofDPI to start listening on port \(port)...")
 
-        // Check if still running
-        let isRunning = process.isRunning
-        log("After 1 second - isRunning: \(isRunning)")
+        let maxAttempts = 10
+        var proxyReady = false
 
-        if !isRunning {
-            let exitCode = process.terminationStatus
-            log("Process exited with code: \(exitCode)")
+        for attempt in 1...maxAttempts {
+            // Check if process died
+            if !process.isRunning {
+                let exitCode = process.terminationStatus
+                log("Process exited early with code: \(exitCode)")
 
-            // Read stderr for error details
-            if let stderrContent = try? String(contentsOf: stderrFile, encoding: .utf8) {
-                log("STDERR content: \(stderrContent)")
+                if let stderrContent = try? String(contentsOf: stderrFile, encoding: .utf8) {
+                    log("STDERR content: \(stderrContent)")
+                }
+                if let stdoutContent = try? String(contentsOf: stdoutFile, encoding: .utf8) {
+                    log("STDOUT content: \(stdoutContent)")
+                }
+
+                throw SpoofDPIError.failedToStart
             }
-            if let stdoutContent = try? String(contentsOf: stdoutFile, encoding: .utf8) {
-                log("STDOUT content: \(stdoutContent)")
+
+            // Check if port is now listening
+            if isPortInUse(port) {
+                log("Port \(port) is listening after attempt \(attempt)")
+                proxyReady = true
+                break
             }
 
+            log("Attempt \(attempt)/\(maxAttempts) - port not ready yet, waiting 500ms...")
+            try await Task.sleep(for: .milliseconds(500))
+        }
+
+        if !proxyReady {
+            log("ERROR: SpoofDPI process is running but not listening on port \(port) after \(maxAttempts) attempts")
+            // Kill the process since it's not working properly
+            process.terminate()
+            currentProcess = nil
             throw SpoofDPIError.failedToStart
         }
 
-        log("SUCCESS! SpoofDPI is running on port \(port)")
+        // Extra verification: try to actually connect to the proxy
+        let connectionVerified = await verifyProxyConnection(port: port)
+        if !connectionVerified {
+            log("WARNING: Port is listening but proxy connection test failed, proceeding anyway")
+        } else {
+            log("Proxy connection verified successfully")
+        }
+
+        log("SUCCESS! SpoofDPI is running and listening on port \(port)")
 
         // Set system proxy automatically
         if enableSystemProxy {
@@ -298,6 +325,44 @@ actor SpoofDPIService {
         let inUse = !output.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         log("Port \(port) in use: \(inUse)")
         return inUse
+    }
+
+    private func verifyProxyConnection(port: Int) async -> Bool {
+        // Try a TCP connection to the proxy to verify it's accepting connections
+        let semaphore = DispatchSemaphore(value: 0)
+        var success = false
+
+        let queue = DispatchQueue(label: "proxy-verify")
+        queue.async {
+            var addr = sockaddr_in()
+            addr.sin_family = sa_family_t(AF_INET)
+            addr.sin_port = in_port_t(port).bigEndian
+            addr.sin_addr.s_addr = inet_addr("127.0.0.1")
+
+            let sock = socket(AF_INET, SOCK_STREAM, 0)
+            guard sock >= 0 else {
+                semaphore.signal()
+                return
+            }
+            defer { close(sock) }
+
+            // Set a short timeout
+            var timeout = timeval(tv_sec: 2, tv_usec: 0)
+            setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, &timeout, socklen_t(MemoryLayout<timeval>.size))
+
+            let result = withUnsafePointer(to: &addr) { ptr in
+                ptr.withMemoryRebound(to: sockaddr.self, capacity: 1) { sockPtr in
+                    connect(sock, sockPtr, socklen_t(MemoryLayout<sockaddr_in>.size))
+                }
+            }
+
+            success = (result == 0)
+            semaphore.signal()
+        }
+
+        _ = semaphore.wait(timeout: .now() + 3)
+        log("Proxy connection verification: \(success ? "OK" : "FAILED")")
+        return success
     }
 
     func isRunning() -> Bool {

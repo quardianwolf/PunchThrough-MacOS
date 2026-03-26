@@ -69,6 +69,12 @@ open /Applications/SplitWire.app
 #### Hazır uygulama:
 [Releases](https://github.com/quardianwolf/SplitWire-Turkey-MacOS/releases) sayfasından `SplitWire.app` dosyasını indirip `/Applications` klasörüne taşıyın.
 
+> **"Not compatible" veya "damaged" hatası alıyorsanız:**
+> Bu hata uygulamanın imzasız (unsigned) olmasından kaynaklanır, Intel/Apple Silicon farkıyla ilgisi yoktur. Çözmek için:
+> 1. Uygulamaya **sağ tık > Aç (Open)** yapın
+> 2. Veya: **Sistem Ayarları > Gizlilik ve Güvenlik** kısmından "Yine de Aç (Open Anyway)" seçin
+> 3. Veya terminalde çalıştırın: `xattr -cr /Applications/SplitWire.app`
+
 ### Hızlı Başlangıç (Tek Komut)
 
 ```bash
@@ -258,6 +264,18 @@ open /Applications/SplitWire.app
 
 #### Pre-built application:
 Download `SplitWire.app` from [Releases](https://github.com/quardianwolf/SplitWire-Turkey-MacOS/releases) page and move it to `/Applications` folder.
+
+**Getting "Not compatible" or "damaged" error?**
+
+This happens because macOS blocks apps that are not signed/notarized by Apple. It has nothing to do with your processor (works on both Intel and Apple Silicon). A new release will be available soon, but in the meantime you can fix this by following these steps:
+
+1. Download the latest release and move SplitWire.app to your Applications folder
+2. Open Terminal (you can find it in Applications > Utilities > Terminal)
+3. Copy and paste this command, then press Enter:
+   `xattr -cr /Applications/SplitWire.app`
+4. Now open SplitWire.app normally — it should launch without any errors
+
+If you still see a warning, right-click (or Control-click) on SplitWire.app and select "Open" from the menu. macOS will ask you to confirm — click "Open" and it will work from that point on.
 
 ### Quick Start (Single Command)
 

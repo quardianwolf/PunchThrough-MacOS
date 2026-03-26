@@ -28,21 +28,30 @@ final class BypassService {
         appState.connectionStatus = .connecting
         appState.addLog("Starting SpoofDPI...")
 
-        do {
-            try await spoofDPI.start(
-                port: appState.spoofDPIPort,
-                dnsAddress: appState.effectiveDNS,
-                enableDoH: appState.enableDoH,
-                enableSystemProxy: appState.enableSystemProxy,
-                appState: appState
-            )
+        // Try up to 2 times - first attempt sometimes fails during cold start
+        for attempt in 1...2 {
+            do {
+                try await spoofDPI.start(
+                    port: appState.spoofDPIPort,
+                    dnsAddress: appState.effectiveDNS,
+                    enableDoH: appState.enableDoH,
+                    enableSystemProxy: appState.enableSystemProxy,
+                    appState: appState
+                )
 
-            appState.connectionStatus = .connected
-            appState.addLog("Successfully connected via SpoofDPI")
+                appState.connectionStatus = .connected
+                appState.addLog("Successfully connected via SpoofDPI")
+                return
 
-        } catch {
-            appState.connectionStatus = .error(error.localizedDescription)
-            appState.addLog("Connection failed: \(error.localizedDescription)", level: .error)
+            } catch {
+                if attempt == 1 {
+                    appState.addLog("First attempt failed, retrying...", level: .warning)
+                    try? await Task.sleep(for: .seconds(1))
+                } else {
+                    appState.connectionStatus = .error(error.localizedDescription)
+                    appState.addLog("Connection failed: \(error.localizedDescription)", level: .error)
+                }
+            }
         }
     }
 
