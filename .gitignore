@@ -33,7 +33,7 @@ Carthage/Build/
 
 # Debug logs
 *.log
-splitwire_debug.log
+punchthrough_debug.log
 spoofdpi_stdout.log
 spoofdpi_stderr.log
 

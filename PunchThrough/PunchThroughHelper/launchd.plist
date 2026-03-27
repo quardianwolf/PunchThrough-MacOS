@@ -3,15 +3,15 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.splitwire.helper</string>
+    <string>com.punchthrough.helper</string>
     <key>MachServices</key>
     <dict>
-        <key>com.splitwire.helper</key>
+        <key>com.punchthrough.helper</key>
         <true/>
     </dict>
     <key>ProgramArguments</key>
     <array>
-        <string>/Library/PrivilegedHelperTools/com.splitwire.helper</string>
+        <string>/Library/PrivilegedHelperTools/com.punchthrough.helper</string>
     </array>
     <key>RunAtLoad</key>
     <true/>

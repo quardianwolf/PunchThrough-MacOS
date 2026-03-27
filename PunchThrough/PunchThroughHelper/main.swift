@@ -54,7 +54,7 @@ final class HelperDelegate: NSObject, NSXPCListenerDelegate {
 
         // Verify it's our main app
         // In production, also verify code signature
-        return processPath.contains("SplitWire.app")
+        return processPath.contains("PunchThrough.app")
     }
 }
 

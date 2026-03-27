@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		001A0001289A0001 /* SplitWireApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0002289A0001 /* SplitWireApp.swift */; };
+		001A0001289A0001 /* PunchThroughApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0002289A0001 /* PunchThroughApp.swift */; };
 		001A0003289A0001 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0004289A0001 /* AppState.swift */; };
 		001A0005289A0001 /* BypassMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0006289A0001 /* BypassMethod.swift */; };
 		001A0007289A0001 /* ConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0008289A0001 /* ConnectionStatus.swift */; };
@@ -24,8 +24,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		001A0000289A0000 /* SplitWire.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SplitWire.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		001A0002289A0001 /* SplitWireApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitWireApp.swift; sourceTree = "<group>"; };
+		001A0000289A0000 /* PunchThrough.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PunchThrough.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		001A0002289A0001 /* PunchThroughApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PunchThroughApp.swift; sourceTree = "<group>"; };
 		001A0004289A0001 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		001A0006289A0001 /* BypassMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BypassMethod.swift; sourceTree = "<group>"; };
 		001A0008289A0001 /* ConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionStatus.swift; sourceTree = "<group>"; };
@@ -39,8 +39,8 @@
 		001A001A289A0001 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		001A001B289A0001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		001A001D289A0001 /* HelperConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperConnection.swift; sourceTree = "<group>"; };
-		001A001F289A0001 /* HelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HelperProtocol.swift; path = SplitWireHelper/HelperProtocol.swift; sourceTree = SOURCE_ROOT; };
-		001A0020289A0001 /* SplitWire.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SplitWire.entitlements; sourceTree = "<group>"; };
+		001A001F289A0001 /* HelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HelperProtocol.swift; path = PunchThroughHelper/HelperProtocol.swift; sourceTree = SOURCE_ROOT; };
+		001A0020289A0001 /* PunchThrough.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PunchThrough.entitlements; sourceTree = "<group>"; };
 		773F3C4D2F7604570015A5A3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -58,29 +58,29 @@
 		001AFFF1289A0000 = {
 			isa = PBXGroup;
 			children = (
-				001AFFF2289A0000 /* SplitWire */,
+				001AFFF2289A0000 /* PunchThrough */,
 				001AFFF3289A0000 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		001AFFF2289A0000 /* SplitWire */ = {
+		001AFFF2289A0000 /* PunchThrough */ = {
 			isa = PBXGroup;
 			children = (
-				001A0002289A0001 /* SplitWireApp.swift */,
+				001A0002289A0001 /* PunchThroughApp.swift */,
 				001A001B289A0001 /* Info.plist */,
-				001A0020289A0001 /* SplitWire.entitlements */,
+				001A0020289A0001 /* PunchThrough.entitlements */,
 				001AFFF4289A0000 /* Models */,
 				001AFFF5289A0000 /* Views */,
 				001AFFF6289A0000 /* Services */,
 				001AFFF7289A0000 /* Resources */,
 			);
-			path = SplitWire;
+			path = PunchThrough;
 			sourceTree = "<group>";
 		};
 		001AFFF3289A0000 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				001A0000289A0000 /* SplitWire.app */,
+				001A0000289A0000 /* PunchThrough.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -137,9 +137,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		001AFFF8289A0000 /* SplitWire */ = {
+		001AFFF8289A0000 /* PunchThrough */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 001AFFFC289A0000 /* Build configuration list for PBXNativeTarget "SplitWire" */;
+			buildConfigurationList = 001AFFFC289A0000 /* Build configuration list for PBXNativeTarget "PunchThrough" */;
 			buildPhases = (
 				001AFFFA289A0000 /* Sources */,
 				001AFFF0289A0000 /* Frameworks */,
@@ -149,9 +149,9 @@
 			);
 			dependencies = (
 			);
-			name = SplitWire;
-			productName = SplitWire;
-			productReference = 001A0000289A0000 /* SplitWire.app */;
+			name = PunchThrough;
+			productName = PunchThrough;
+			productReference = 001A0000289A0000 /* PunchThrough.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -169,7 +169,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 001AFFFE289A0000 /* Build configuration list for PBXProject "SplitWire" */;
+			buildConfigurationList = 001AFFFE289A0000 /* Build configuration list for PBXProject "PunchThrough" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -184,7 +184,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				001AFFF8289A0000 /* SplitWire */,
+				001AFFF8289A0000 /* PunchThrough */,
 			);
 		};
 /* End PBXProject section */
@@ -206,7 +206,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				001A0001289A0001 /* SplitWireApp.swift in Sources */,
+				001A0001289A0001 /* PunchThroughApp.swift in Sources */,
 				001A0003289A0001 /* AppState.swift in Sources */,
 				001A0005289A0001 /* BypassMethod.swift in Sources */,
 				001A0007289A0001 /* ConnectionStatus.swift in Sources */,
@@ -367,14 +367,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = SplitWire/SplitWire.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PunchThrough/PunchThrough.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = SplitWire/Info.plist;
+				INFOPLIST_FILE = PunchThrough/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -382,7 +382,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.splitwire.macos;
+				PRODUCT_BUNDLE_IDENTIFIER = com.punchthrough.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -395,14 +395,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = SplitWire/SplitWire.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PunchThrough/PunchThrough.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = SplitWire/Info.plist;
+				INFOPLIST_FILE = PunchThrough/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -410,7 +410,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.splitwire.macos;
+				PRODUCT_BUNDLE_IDENTIFIER = com.punchthrough.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -421,7 +421,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		001AFFFC289A0000 /* Build configuration list for PBXNativeTarget "SplitWire" */ = {
+		001AFFFC289A0000 /* Build configuration list for PBXNativeTarget "PunchThrough" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				001B0001289A0000 /* Debug */,
@@ -430,7 +430,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		001AFFFE289A0000 /* Build configuration list for PBXProject "SplitWire" */ = {
+		001AFFFE289A0000 /* Build configuration list for PBXProject "PunchThrough" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				001AFFFF289A0000 /* Debug */,

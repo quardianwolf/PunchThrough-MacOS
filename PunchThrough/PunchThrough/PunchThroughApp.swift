@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct SplitWireApp: App {
+struct PunchThroughApp: App {
     @State private var appState = AppState()
     @State private var showSettings = false
 
@@ -14,7 +14,7 @@ struct SplitWireApp: App {
         }
         .menuBarExtraStyle(.menu)
 
-        Window("SplitWire Settings", id: "settings") {
+        Window("PunchThrough Settings", id: "settings") {
             SettingsView()
                 .environment(appState)
         }
@@ -75,7 +75,7 @@ struct MenuBarContent: View {
         Divider()
 
         // Quit Button
-        Button("Quit SplitWire") {
+        Button("Quit PunchThrough") {
             NSApplication.shared.terminate(nil)
         }
         .keyboardShortcut("q", modifiers: .command)

@@ -44,6 +44,6 @@ import Foundation
 // MARK: - Constants
 
 struct HelperConstants {
-    static let machServiceName = "com.splitwire.helper"
+    static let machServiceName = "com.punchthrough.helper"
     static let version = "1.0.0"
 }

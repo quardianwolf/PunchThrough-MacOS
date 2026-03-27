@@ -3,18 +3,18 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleIdentifier</key>
-    <string>com.splitwire.helper</string>
+    <string>com.punchthrough.helper</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>SplitWireHelper</string>
+    <string>PunchThroughHelper</string>
     <key>CFBundleShortVersionString</key>
     <string>1.0</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>SMAuthorizedClients</key>
     <array>
-        <string>identifier "com.splitwire.macos" and anchor apple generic</string>
+        <string>identifier "com.punchthrough.macos" and anchor apple generic</string>
     </array>
 </dict>
 </plist>

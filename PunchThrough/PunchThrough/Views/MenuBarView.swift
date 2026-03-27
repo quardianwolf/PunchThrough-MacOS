@@ -105,7 +105,7 @@ struct MenuBarView: View {
             Button {
                 NSApplication.shared.terminate(nil)
             } label: {
-                Text(String(localized: "Quit SplitWire"))
+                Text(String(localized: "Quit PunchThrough"))
             }
             .keyboardShortcut("q", modifiers: .command)
         }

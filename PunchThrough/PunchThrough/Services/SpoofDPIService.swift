@@ -7,7 +7,7 @@ actor SpoofDPIService {
 
     // Log file on desktop
     private let logFile = FileManager.default.homeDirectoryForCurrentUser
-        .appendingPathComponent("Desktop/splitwire_debug.log")
+        .appendingPathComponent("Desktop/punchthrough_debug.log")
 
     private func log(_ message: String) {
         let timestamp = ISO8601DateFormatter().string(from: Date())

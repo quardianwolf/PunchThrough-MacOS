@@ -92,13 +92,13 @@ struct GeneralSettingsView: View {
 
             Section {
                 HStack {
-                    Text("SplitWire for macOS")
+                    Text("PunchThrough for macOS")
                     Spacer()
                     Text("v1.0.0")
                         .foregroundStyle(.secondary)
                 }
 
-                Link(destination: URL(string: "https://github.com/quardianwolf/SplitWire-MacOS")!) {
+                Link(destination: URL(string: "https://github.com/quardianwolf/PunchThrough-MacOS")!) {
                     HStack {
                         Text(String(localized: "GitHub Repository"))
                         Spacer()

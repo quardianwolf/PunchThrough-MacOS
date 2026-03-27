@@ -1,4 +1,4 @@
-# SplitWire for macOS
+# PunchThrough for macOS
 
 A native macOS menu bar application that bypasses DPI (Deep Packet Inspection) restrictions. Works with ISPs that use DPI-based internet filtering.
 
@@ -41,35 +41,35 @@ which spoofdpi
 # /opt/homebrew/bin/spoofdpi (Apple Silicon) or /usr/local/bin/spoofdpi (Intel)
 ```
 
-### 2. Install SplitWire
+### 2. Install PunchThrough
 
 #### Pre-built (recommended):
-Download `SplitWire.app` from [Releases](https://github.com/quardianwolf/SplitWire-MacOS/releases) and move it to `/Applications`.
+Download `PunchThrough.app` from [Releases](https://github.com/quardianwolf/PunchThrough-MacOS/releases) and move it to `/Applications`.
 
 **Getting "Not compatible" or "damaged" error?**
 
 This happens because macOS blocks apps that are not signed/notarized by Apple. It works on both Intel and Apple Silicon. To fix:
 
-1. Download the latest release and move SplitWire.app to your Applications folder
+1. Download the latest release and move PunchThrough.app to your Applications folder
 2. Open Terminal (Applications > Utilities > Terminal)
-3. Run: `xattr -cr /Applications/SplitWire.app`
-4. Open SplitWire.app normally
+3. Run: `xattr -cr /Applications/PunchThrough.app`
+4. Open PunchThrough.app normally
 
-If you still see a warning, right-click on SplitWire.app and select "Open".
+If you still see a warning, right-click on PunchThrough.app and select "Open".
 
 #### Build from source:
 ```bash
 xcode-select --install
-git clone https://github.com/quardianwolf/SplitWire-MacOS.git
-cd SplitWire-MacOS
-xcodebuild -scheme SplitWire -configuration Release build
-cp -r ~/Library/Developer/Xcode/DerivedData/SplitWire-*/Build/Products/Release/SplitWire.app /Applications/
-open /Applications/SplitWire.app
+git clone https://github.com/quardianwolf/PunchThrough-MacOS.git
+cd PunchThrough-MacOS
+xcodebuild -scheme PunchThrough -configuration Release build
+cp -r ~/Library/Developer/Xcode/DerivedData/PunchThrough-*/Build/Products/Release/PunchThrough.app /Applications/
+open /Applications/PunchThrough.app
 ```
 
 ## Usage
 
-1. **Launch** - SplitWire appears in your menu bar
+1. **Launch** - PunchThrough appears in your menu bar
 2. **Connect** - Click the menu bar icon and select "Connect"
 3. **Settings** - Configure DNS, port, language, and more
 
@@ -81,7 +81,7 @@ open /Applications/SplitWire.app
 
 ## How It Works
 
-SplitWire runs a local proxy on your Mac (127.0.0.1:8080) and routes your traffic through it. It works like a local VPN, but instead of encrypting and tunneling all traffic to a remote server, it manipulates how your packets are sent to trick your ISP's DPI (Deep Packet Inspection) system.
+PunchThrough runs a local proxy on your Mac (127.0.0.1:8080) and routes your traffic through it. It works like a local VPN, but instead of encrypting and tunneling all traffic to a remote server, it manipulates how your packets are sent to trick your ISP's DPI (Deep Packet Inspection) system.
 
 **What it does:**
 1. **Packet Fragmentation** - Splits the HTTPS handshake into tiny chunks so the DPI can't read the destination

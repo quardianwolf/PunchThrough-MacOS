@@ -1,4 +1,4 @@
-# SplitWire for macOS
+# PunchThrough for macOS
 
 A native macOS menu bar application that bypasses DPI (Deep Packet Inspection) restrictions. Works with ISPs that use DPI-based internet filtering.
 
@@ -20,13 +20,13 @@ Built with Swift/SwiftUI. Powered by [SpoofDPI](https://github.com/xvzc/SpoofDPI
 brew install spoofdpi
 ```
 
-Download `SplitWire.app` from [Releases](https://github.com/quardianwolf/SplitWire-MacOS/releases), move to `/Applications`, and launch.
+Download `PunchThrough.app` from [Releases](https://github.com/quardianwolf/PunchThrough-MacOS/releases), move to `/Applications`, and launch.
 
-> **"Not compatible" error?** Run `xattr -cr /Applications/SplitWire.app` in Terminal.
+> **"Not compatible" error?** Run `xattr -cr /Applications/PunchThrough.app` in Terminal.
 
 Requires macOS 14.0+ and SpoofDPI v1.2.1+.
 
-See [full documentation](SplitWire/README.md) for build instructions, settings, and troubleshooting.
+See [full documentation](PunchThrough/README.md) for build instructions, settings, and troubleshooting.
 
 ## License
 
