@@ -74,9 +74,8 @@ actor SpoofDPIService {
             throw SpoofDPIError.portInUse(port)
         }
 
-        // Build arguments - Turkish ISP bypass settings
-        // Requires SpoofDPI v1.2.1+ for --https-split-mode and --policy-auto
-        var arguments: [String] = [
+        // Build argument sets - try enhanced flags first, fall back to basic
+        var enhancedArgs: [String] = [
             "--listen-addr", "127.0.0.1:\(port)",
             "--dns-addr", "\(dnsAddress):53",
             "--https-disorder",
@@ -84,98 +83,48 @@ actor SpoofDPIService {
             "--https-split-mode", "random",
             "--policy-auto"
         ]
-
         if enableDoH {
-            arguments.append(contentsOf: ["--dns-mode", "https"])
+            enhancedArgs.append(contentsOf: ["--dns-mode", "https"])
         }
 
-        let fullCommand = "\(binaryPath) \(arguments.joined(separator: " "))"
-        log("Full command: \(fullCommand)")
-
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: binaryPath)
-        process.arguments = arguments
-
-        // Redirect output to files for debugging
-        let stdoutFile = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("Desktop/spoofdpi_stdout.log")
-        let stderrFile = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("Desktop/spoofdpi_stderr.log")
-
-        FileManager.default.createFile(atPath: stdoutFile.path, contents: nil)
-        FileManager.default.createFile(atPath: stderrFile.path, contents: nil)
-
-        if let stdoutHandle = try? FileHandle(forWritingTo: stdoutFile),
-           let stderrHandle = try? FileHandle(forWritingTo: stderrFile) {
-            process.standardOutput = stdoutHandle
-            process.standardError = stderrHandle
+        var basicArgs: [String] = [
+            "--listen-addr", "127.0.0.1:\(port)",
+            "--dns-addr", "\(dnsAddress):53",
+            "--https-disorder",
+            "--https-chunk-size", "1",
+            "--https-split-mode", "random"
+        ]
+        if enableDoH {
+            basicArgs.append(contentsOf: ["--dns-mode", "https"])
         }
 
-        do {
-            log("Calling process.run()...")
-            try process.run()
-            log("process.run() succeeded! PID: \(process.processIdentifier)")
-            currentProcess = process
-        } catch let error {
-            log("process.run() FAILED: \(error.localizedDescription)")
-            log("Error details: \(error)")
-            throw SpoofDPIError.failedToStart
-        }
+        let argSets = [enhancedArgs, basicArgs]
 
-        // Wait for process to initialize and verify it's actually listening
-        log("Waiting for SpoofDPI to start listening on port \(port)...")
+        var started = false
+        for (index, arguments) in argSets.enumerated() {
+            let label = index == 0 ? "enhanced" : "basic"
+            let fullCommand = "\(binaryPath) \(arguments.joined(separator: " "))"
+            log("Trying \(label) flags: \(fullCommand)")
 
-        let maxAttempts = 10
-        var proxyReady = false
+            let result = try await launchProcess(binaryPath: binaryPath, arguments: arguments, port: port)
 
-        for attempt in 1...maxAttempts {
-            // Check if process died
-            if !process.isRunning {
-                let exitCode = process.terminationStatus
-                log("Process exited early with code: \(exitCode)")
-
-                let stderrContent = (try? String(contentsOf: stderrFile, encoding: .utf8)) ?? ""
-                log("STDERR content: \(stderrContent)")
-
-                if let stdoutContent = try? String(contentsOf: stdoutFile, encoding: .utf8) {
-                    log("STDOUT content: \(stdoutContent)")
-                }
-
-                // Check if it's a flag compatibility issue
-                if stderrContent.contains("flag provided but not defined") {
-                    throw SpoofDPIError.outdatedVersion
-                }
-
+            switch result {
+            case .success:
+                log("SUCCESS! SpoofDPI is running and listening on port \(port) (\(label) flags)")
+                started = true
+            case .unsupportedFlags:
+                log("Unsupported flags detected, falling back to \(index == 0 ? "basic" : "no more") flags...")
+                continue
+            case .failed:
                 throw SpoofDPIError.failedToStart
             }
 
-            // Check if port is now listening
-            if isPortInUse(port) {
-                log("Port \(port) is listening after attempt \(attempt)")
-                proxyReady = true
-                break
-            }
-
-            log("Attempt \(attempt)/\(maxAttempts) - port not ready yet, waiting 500ms...")
-            try await Task.sleep(for: .milliseconds(500))
+            if started { break }
         }
 
-        if !proxyReady {
-            log("ERROR: SpoofDPI process is running but not listening on port \(port) after \(maxAttempts) attempts")
-            process.terminate()
-            currentProcess = nil
+        guard started else {
             throw SpoofDPIError.failedToStart
         }
-
-        // Extra verification: try to actually connect to the proxy
-        let connectionVerified = await verifyProxyConnection(port: port)
-        if !connectionVerified {
-            log("WARNING: Port is listening but proxy connection test failed, proceeding anyway")
-        } else {
-            log("Proxy connection verified successfully")
-        }
-
-        log("SUCCESS! SpoofDPI is running and listening on port \(port)")
 
         // Set system proxy automatically
         if enableSystemProxy {
@@ -238,6 +187,88 @@ actor SpoofDPIService {
                 log("Proxy disabled for \(service)")
             }
         }
+    }
+
+    private enum LaunchResult {
+        case success
+        case unsupportedFlags
+        case failed
+    }
+
+    private func launchProcess(binaryPath: String, arguments: [String], port: Int) async throws -> LaunchResult {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: binaryPath)
+        process.arguments = arguments
+
+        let stdoutFile = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Desktop/spoofdpi_stdout.log")
+        let stderrFile = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Desktop/spoofdpi_stderr.log")
+
+        FileManager.default.createFile(atPath: stdoutFile.path, contents: nil)
+        FileManager.default.createFile(atPath: stderrFile.path, contents: nil)
+
+        if let stdoutHandle = try? FileHandle(forWritingTo: stdoutFile),
+           let stderrHandle = try? FileHandle(forWritingTo: stderrFile) {
+            process.standardOutput = stdoutHandle
+            process.standardError = stderrHandle
+        }
+
+        do {
+            log("Calling process.run()...")
+            try process.run()
+            log("process.run() succeeded! PID: \(process.processIdentifier)")
+            currentProcess = process
+        } catch {
+            log("process.run() FAILED: \(error.localizedDescription)")
+            return .failed
+        }
+
+        log("Waiting for SpoofDPI to start listening on port \(port)...")
+
+        let maxAttempts = 10
+        for attempt in 1...maxAttempts {
+            if !process.isRunning {
+                let exitCode = process.terminationStatus
+                log("Process exited early with code: \(exitCode)")
+
+                let stderrContent = (try? String(contentsOf: stderrFile, encoding: .utf8)) ?? ""
+                log("STDERR content: \(stderrContent)")
+
+                if let stdoutContent = try? String(contentsOf: stdoutFile, encoding: .utf8) {
+                    log("STDOUT content: \(stdoutContent)")
+                }
+
+                if stderrContent.contains("flag provided but not defined") {
+                    currentProcess = nil
+                    return .unsupportedFlags
+                }
+
+                currentProcess = nil
+                return .failed
+            }
+
+            if isPortInUse(port) {
+                log("Port \(port) is listening after attempt \(attempt)")
+
+                let connectionVerified = await verifyProxyConnection(port: port)
+                if !connectionVerified {
+                    log("WARNING: Port is listening but proxy connection test failed, proceeding anyway")
+                } else {
+                    log("Proxy connection verified successfully")
+                }
+
+                return .success
+            }
+
+            log("Attempt \(attempt)/\(maxAttempts) - port not ready yet, waiting 500ms...")
+            try await Task.sleep(for: .milliseconds(500))
+        }
+
+        log("ERROR: SpoofDPI process is running but not listening on port \(port) after \(maxAttempts) attempts")
+        process.terminate()
+        currentProcess = nil
+        return .failed
     }
 
     private func getActiveNetworkServices() -> [String] {
@@ -379,7 +410,6 @@ enum SpoofDPIError: LocalizedError {
     case failedToStart
     case failedToStop
     case portInUse(Int)
-    case outdatedVersion
 
     var errorDescription: String? {
         switch self {
@@ -391,8 +421,6 @@ enum SpoofDPIError: LocalizedError {
             return "Failed to stop SpoofDPI"
         case .portInUse(let port):
             return "Port \(port) is already in use. Close other applications using this port."
-        case .outdatedVersion:
-            return "SpoofDPI is outdated. Please update: brew upgrade spoofdpi"
         }
     }
 }
