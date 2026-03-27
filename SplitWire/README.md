@@ -1,379 +1,117 @@
 # SplitWire for macOS
 
-DPI (Deep Packet Inspection) bypass aracı. Türk ISP'lerinin uyguladığı internet engellerini aşmak için tasarlanmış native macOS uygulaması.
+A native macOS menu bar application that bypasses DPI (Deep Packet Inspection) restrictions. Works with ISPs that use DPI-based internet filtering.
 
-## Ekran Görüntüleri / Screenshots
+## Screenshots
 
 | Disconnected | Connected | Settings |
 |:---:|:---:|:---:|
 | ![Disconnected](Screenshots/menubar-disconnected.webp) | ![Connected](Screenshots/menubar-connected.webp) | ![Settings](Screenshots/settings.webp) |
 
-## Özellikler
-
-- **Tek tıkla bağlantı** - Menu bar'dan hızlıca Connect/Disconnect
-- **Otomatik proxy ayarı** - HTTP ve HTTPS proxy otomatik yapılandırılır
-- **Türk ISP optimizasyonu** - Türk internet sağlayıcıları için özel ayarlar
-- **DNS over HTTPS** - Güvenli DNS sorguları
-- **Hafif ve hızlı** - Native Swift/SwiftUI ile yazıldı
-
-## Gereksinimler
-
-- macOS 14.0 (Sonoma) veya üstü
-- [Homebrew](https://brew.sh) paket yöneticisi
-- Xcode Command Line Tools (kaynak koddan derlemek için)
-
-## Kurulum
-
-> **ÖNEMLİ:** SpoofDPI yüklü olmalıdır, yoksa uygulama çalışmaz!
-
-### 1. Homebrew yükle (yoksa)
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-### 2. SpoofDPI'ı yükle (ZORUNLU)
-
-```bash
-brew install spoofdpi
-```
-
-Yüklü olduğunu kontrol et:
-```bash
-which spoofdpi
-# Çıktı: /opt/homebrew/bin/spoofdpi veya /usr/local/bin/spoofdpi
-```
-
-### 3. SplitWire'ı yükle
-
-#### Kaynak koddan derleme (Xcode gerekli):
-
-```bash
-# Xcode Command Line Tools yükle (yoksa)
-xcode-select --install
-
-# Repoyu klonla
-git clone https://github.com/quardianwolf/SplitWire-Turkey-MacOS.git
-cd SplitWire-Turkey-MacOS
-
-# Derle
-xcodebuild -scheme SplitWire -configuration Release build
-
-# Applications'a kopyala
-cp -r ~/Library/Developer/Xcode/DerivedData/SplitWire-*/Build/Products/Release/SplitWire.app /Applications/
-
-# Uygulamayı başlat
-open /Applications/SplitWire.app
-```
-
-#### Hazır uygulama:
-[Releases](https://github.com/quardianwolf/SplitWire-Turkey-MacOS/releases) sayfasından `SplitWire.app` dosyasını indirip `/Applications` klasörüne taşıyın.
-
-> **"Not compatible" veya "damaged" hatası alıyorsanız:**
-> Bu hata uygulamanın imzasız (unsigned) olmasından kaynaklanır, Intel/Apple Silicon farkıyla ilgisi yoktur. Çözmek için:
-> 1. Uygulamaya **sağ tık > Aç (Open)** yapın
-> 2. Veya: **Sistem Ayarları > Gizlilik ve Güvenlik** kısmından "Yine de Aç (Open Anyway)" seçin
-> 3. Veya terminalde çalıştırın: `xattr -cr /Applications/SplitWire.app`
-
-### Hızlı Başlangıç (Tek Komut)
-
-```bash
-brew install spoofdpi && \
-git clone https://github.com/quardianwolf/SplitWire-Turkey-MacOS.git && \
-cd SplitWire-Turkey-MacOS && \
-xcodebuild -scheme SplitWire -configuration Release build && \
-cp -r ~/Library/Developer/Xcode/DerivedData/SplitWire-*/Build/Products/Release/SplitWire.app /Applications/ && \
-open /Applications/SplitWire.app
-```
-
-## Kullanım
-
-### Temel Kullanım
-
-1. **Uygulamayı başlat** - SplitWire menu bar'da görünecek
-2. **Connect** - Bypass'ı aktif et
-3. **Disconnect** - Bypass'ı kapat
-
-### Menu Bar
-
-| Öğe | Açıklama |
-|-----|----------|
-| Durum | Bağlantı durumu (Connected/Disconnected) |
-| Connect/Disconnect | Bypass'ı aç/kapat |
-| Settings | Ayarlar penceresini aç |
-| Quit | Uygulamayı kapat |
-
-### Ayarlar
-
-#### DNS Seçenekleri
-- **Google** (8.8.8.8) - Varsayılan
-- **Cloudflare** (1.1.1.1)
-- **Quad9** (9.9.9.9)
-- **Custom** - Özel DNS adresi
-
-#### Bypass Seçenekleri
-- **Port** - Proxy port numarası (varsayılan: 8080)
-- **DNS over HTTPS** - Güvenli DNS sorguları
-- **System Proxy** - Otomatik sistem proxy ayarı
-
-## Nasıl Çalışır?
-
-SplitWire, [SpoofDPI](https://github.com/xvzc/SpoofDPI) aracını kullanarak DPI bypass yapar:
-
-1. **Paket Parçalama** - HTTPS paketlerini küçük parçalara böler
-2. **Disorder** - Paketleri karışık sırada gönderir
-3. **DNS over HTTPS** - DNS sorgularını şifreler
-
-Bu teknikler, ISP'lerin DPI sistemlerinin trafiği analiz etmesini zorlaştırır.
-
-## Teknik Detaylar
-
-### SpoofDPI Parametreleri
-
-```bash
-spoofdpi \
-  --listen-addr 127.0.0.1:8080 \
-  --dns-addr 8.8.8.8:53 \
-  --dns-mode https \
-  --https-disorder \
-  --https-chunk-size 1
-```
-
-### Sistem Proxy
-
-Uygulama otomatik olarak şu proxy ayarlarını yapar:
-- HTTP Proxy: `127.0.0.1:8080`
-- HTTPS Proxy: `127.0.0.1:8080`
-
-## Sorun Giderme
-
-### SpoofDPI yüklü değil hatası
-
-```bash
-brew install spoofdpi
-```
-
-### Port kullanımda hatası
-
-Başka bir uygulama 8080 portunu kullanıyor olabilir:
-```bash
-lsof -i :8080
-```
-
-Settings'den farklı bir port seçebilirsiniz.
-
-### Bağlantı başarısız
-
-1. SpoofDPI'ın yüklü olduğundan emin olun
-2. Settings > Logs kısmından hata mesajlarını kontrol edin
-3. Farklı bir DNS sunucusu deneyin
-
-### Discord/Twitter hala açılmıyor
-
-1. Tarayıcı önbelleğini temizleyin
-2. Uygulamayı tamamen kapatıp tekrar açın
-3. DNS önbelleğini temizleyin:
-```bash
-sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
-```
-
-## Katkıda Bulunma
-
-1. Fork edin
-2. Feature branch oluşturun (`git checkout -b feature/amazing`)
-3. Commit edin (`git commit -m 'Add amazing feature'`)
-4. Push edin (`git push origin feature/amazing`)
-5. Pull Request açın
-
-## Lisans
-
-MIT License
-
-## Teşekkürler
-
-- [SpoofDPI](https://github.com/xvzc/SpoofDPI) - DPI bypass motoru
-- Tüm katkıda bulunanlara
-
----
-
-**Not:** Bu uygulama yasal amaçlarla kullanılmak üzere tasarlanmıştır. Lütfen yerel yasalara uygun şekilde kullanın.
-
----
-
-# SplitWire for macOS (English)
-
-A DPI (Deep Packet Inspection) bypass tool. Native macOS application designed to bypass internet restrictions applied by Turkish ISPs.
-
 ## Features
 
-- **One-click connection** - Quick Connect/Disconnect from menu bar
+- **One-click connection** - Connect/Disconnect from the menu bar
 - **Automatic proxy setup** - HTTP and HTTPS proxy configured automatically
-- **Turkish ISP optimization** - Special settings for Turkish internet providers
-- **DNS over HTTPS** - Secure DNS queries
-- **Lightweight and fast** - Written in native Swift/SwiftUI
+- **Auto policy detection** - Automatically detects and bypasses blocked sites
+- **DNS over HTTPS** - Secure encrypted DNS queries
+- **Multiple DNS options** - Google, Cloudflare, Quad9, or custom DNS
+- **Multi-language** - English, Turkish, French (selectable in Settings)
+- **Lightweight and fast** - Native Swift/SwiftUI, runs in the menu bar
 
 ## Requirements
 
 - macOS 14.0 (Sonoma) or later
-- [Homebrew](https://brew.sh) package manager
-- Xcode Command Line Tools (for building from source)
+- [SpoofDPI](https://github.com/xvzc/SpoofDPI) v1.2.1+ (required)
 
 ## Installation
 
-> **IMPORTANT:** SpoofDPI must be installed, otherwise the app won't work!
-
-### 1. Install Homebrew (if not installed)
+### 1. Install SpoofDPI (required)
 
 ```bash
+# Install Homebrew if you don't have it
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
 
-### 2. Install SpoofDPI (REQUIRED)
-
-```bash
+# Install SpoofDPI
 brew install spoofdpi
 ```
 
-Verify installation:
+Verify:
 ```bash
 which spoofdpi
-# Output: /opt/homebrew/bin/spoofdpi or /usr/local/bin/spoofdpi
+# /opt/homebrew/bin/spoofdpi (Apple Silicon) or /usr/local/bin/spoofdpi (Intel)
 ```
 
-### 3. Install SplitWire
+### 2. Install SplitWire
 
-#### Build from source (requires Xcode):
-
-```bash
-# Install Xcode Command Line Tools (if not installed)
-xcode-select --install
-
-# Clone the repository
-git clone https://github.com/quardianwolf/SplitWire-Turkey-MacOS.git
-cd SplitWire-Turkey-MacOS
-
-# Build
-xcodebuild -scheme SplitWire -configuration Release build
-
-# Copy to Applications
-cp -r ~/Library/Developer/Xcode/DerivedData/SplitWire-*/Build/Products/Release/SplitWire.app /Applications/
-
-# Launch the app
-open /Applications/SplitWire.app
-```
-
-#### Pre-built application:
-Download `SplitWire.app` from [Releases](https://github.com/quardianwolf/SplitWire-Turkey-MacOS/releases) page and move it to `/Applications` folder.
+#### Pre-built (recommended):
+Download `SplitWire.app` from [Releases](https://github.com/quardianwolf/SplitWire-MacOS/releases) and move it to `/Applications`.
 
 **Getting "Not compatible" or "damaged" error?**
 
-This happens because macOS blocks apps that are not signed/notarized by Apple. It has nothing to do with your processor (works on both Intel and Apple Silicon). A new release will be available soon, but in the meantime you can fix this by following these steps:
+This happens because macOS blocks apps that are not signed/notarized by Apple. It works on both Intel and Apple Silicon. To fix:
 
 1. Download the latest release and move SplitWire.app to your Applications folder
-2. Open Terminal (you can find it in Applications > Utilities > Terminal)
-3. Copy and paste this command, then press Enter:
-   `xattr -cr /Applications/SplitWire.app`
-4. Now open SplitWire.app normally — it should launch without any errors
+2. Open Terminal (Applications > Utilities > Terminal)
+3. Run: `xattr -cr /Applications/SplitWire.app`
+4. Open SplitWire.app normally
 
-If you still see a warning, right-click (or Control-click) on SplitWire.app and select "Open" from the menu. macOS will ask you to confirm — click "Open" and it will work from that point on.
+If you still see a warning, right-click on SplitWire.app and select "Open".
 
-### Quick Start (Single Command)
-
+#### Build from source:
 ```bash
-brew install spoofdpi && \
-git clone https://github.com/quardianwolf/SplitWire-Turkey-MacOS.git && \
-cd SplitWire-Turkey-MacOS && \
-xcodebuild -scheme SplitWire -configuration Release build && \
-cp -r ~/Library/Developer/Xcode/DerivedData/SplitWire-*/Build/Products/Release/SplitWire.app /Applications/ && \
+xcode-select --install
+git clone https://github.com/quardianwolf/SplitWire-MacOS.git
+cd SplitWire-MacOS
+xcodebuild -scheme SplitWire -configuration Release build
+cp -r ~/Library/Developer/Xcode/DerivedData/SplitWire-*/Build/Products/Release/SplitWire.app /Applications/
 open /Applications/SplitWire.app
 ```
 
 ## Usage
 
-### Basic Usage
-
-1. **Launch the app** - SplitWire will appear in menu bar
-2. **Connect** - Activate bypass
-3. **Disconnect** - Deactivate bypass
-
-### Menu Bar
-
-| Item | Description |
-|------|-------------|
-| Status | Connection status (Connected/Disconnected) |
-| Connect/Disconnect | Toggle bypass on/off |
-| Settings | Open settings window |
-| Quit | Close application |
+1. **Launch** - SplitWire appears in your menu bar
+2. **Connect** - Click the menu bar icon and select "Connect"
+3. **Settings** - Configure DNS, port, language, and more
 
 ### Settings
 
-#### DNS Options
-- **Google** (8.8.8.8) - Default
-- **Cloudflare** (1.1.1.1)
-- **Quad9** (9.9.9.9)
-- **Custom** - Custom DNS address
-
-#### Bypass Options
-- **Port** - Proxy port number (default: 8080)
-- **DNS over HTTPS** - Secure DNS queries
-- **System Proxy** - Automatic system proxy configuration
+- **General** - Launch at login, language selection, connection status
+- **Bypass** - DNS server, DoH, proxy port, installation status
+- **Logs** - View and clear connection logs
 
 ## How It Works
 
-SplitWire uses [SpoofDPI](https://github.com/xvzc/SpoofDPI) for DPI bypass:
+SplitWire runs a local proxy on your Mac (127.0.0.1:8080) and routes your traffic through it. It works like a local VPN, but instead of encrypting and tunneling all traffic to a remote server, it manipulates how your packets are sent to trick your ISP's DPI (Deep Packet Inspection) system.
 
-1. **Packet Fragmentation** - Splits HTTPS packets into smaller chunks
-2. **Disorder** - Sends packets out of order
-3. **DNS over HTTPS** - Encrypts DNS queries
+**What it does:**
+1. **Packet Fragmentation** - Splits the HTTPS handshake into tiny chunks so the DPI can't read the destination
+2. **Disorder** - Sends those chunks out of order, further confusing the DPI
+3. **Auto Policy** - Automatically detects which sites are blocked and applies bypass only to those
+4. **DNS over HTTPS** - Encrypts DNS queries so your ISP can't block sites at the DNS level
 
-These techniques make it harder for ISP DPI systems to analyze traffic.
-
-## Technical Details
-
-### SpoofDPI Parameters
-
-```bash
-spoofdpi \
-  --listen-addr 127.0.0.1:8080 \
-  --dns-addr 8.8.8.8:53 \
-  --dns-mode https \
-  --https-disorder \
-  --https-chunk-size 1
-```
-
-### System Proxy
-
-The application automatically configures:
-- HTTP Proxy: `127.0.0.1:8080`
-- HTTPS Proxy: `127.0.0.1:8080`
+**How is this different from a VPN?**
+- No remote server needed - everything runs locally on your Mac
+- No speed loss - your traffic goes directly to the destination, not through a middleman
+- Your ISP still sees your traffic, but can't analyze it well enough to block specific sites
+- No subscription, no account, no data collection
 
 ## Troubleshooting
 
-### SpoofDPI not installed error
-
+### SpoofDPI outdated or not installed
 ```bash
-brew install spoofdpi
+brew install spoofdpi    # install
+brew upgrade spoofdpi    # update to latest
 ```
 
-### Port in use error
-
-Another application might be using port 8080:
+### Port in use
 ```bash
 lsof -i :8080
 ```
+You can change the port in Settings.
 
-You can select a different port in Settings.
-
-### Connection failed
-
-1. Make sure SpoofDPI is installed
-2. Check error messages in Settings > Logs
-3. Try a different DNS server
-
-### Discord/Twitter still not working
-
-1. Clear browser cache
-2. Completely close and reopen the application
+### Sites still not loading
+1. Check Settings > Logs for error messages
+2. Try a different DNS server (Cloudflare, Quad9)
 3. Flush DNS cache:
 ```bash
 sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
@@ -381,11 +119,7 @@ sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing`)
-5. Open a Pull Request
+Contributions and translations are welcome! Feel free to submit a Pull Request.
 
 ## License
 
@@ -394,7 +128,7 @@ MIT License
 ## Acknowledgments
 
 - [SpoofDPI](https://github.com/xvzc/SpoofDPI) - DPI bypass engine
-- All contributors
+- [@Tetonne](https://github.com/Tetonne) - French translation
 
 ---
 

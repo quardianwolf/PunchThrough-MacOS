@@ -15,6 +15,7 @@ final class AppState {
     var enableDoH: Bool = true
     var enableSystemProxy: Bool = true
     var launchAtLogin: Bool = false
+    var appLanguage: AppLanguage = AppLanguage.current()
 
     // MARK: - Logs
     var logs: [LogEntry] = []
@@ -96,6 +97,40 @@ struct LogEntry: Identifiable {
     let timestamp: Date
     let message: String
     let level: LogLevel
+}
+
+enum AppLanguage: String, CaseIterable, Identifiable {
+    case system = "system"
+    case english = "en"
+    case turkish = "tr"
+    case french = "fr"
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .system: return String(localized: "System Default")
+        case .english: return "English"
+        case .turkish: return "Türkçe"
+        case .french: return "Français"
+        }
+    }
+
+    func apply() {
+        if self == .system {
+            UserDefaults.standard.removeObject(forKey: "AppleLanguages")
+        } else {
+            UserDefaults.standard.set([rawValue], forKey: "AppleLanguages")
+        }
+    }
+
+    static func current() -> AppLanguage {
+        guard let languages = UserDefaults.standard.array(forKey: "AppleLanguages") as? [String],
+              let first = languages.first else {
+            return .system
+        }
+        return AppLanguage.allCases.first { $0.rawValue == first } ?? .system
+    }
 }
 
 enum LogLevel {

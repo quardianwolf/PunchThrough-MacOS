@@ -1,0 +1,53 @@
+/* General */
+"Connected" = "Connecté";
+"Connecting..." = "Connexion...";
+"Disconnecting..." = "Déconnexion...";
+"Disconnected" = "Déconnecté";
+"Error: %@" = "Erreur : %@";
+"Connect" = "Se connecter";
+"Disconnect" = "Se déconnecter";
+
+/* Menu */
+"Method:" = "Méthode :";
+"Settings..." = "Réglages...";
+"Quit SplitWire" = "Quitter SplitWire";
+
+/* Settings - General */
+"General" = "Général";
+"Bypass" = "Contournement";
+"Logs" = "Journaux";
+"Startup" = "Démarrage";
+"Launch at Login" = "Lancer à la connexion";
+"Connection" = "Connexion";
+"Status" = "Statut";
+"Method" = "Méthode";
+"DNS" = "DNS";
+"About" = "À propos";
+"GitHub Repository" = "Dépôt GitHub";
+
+"Language" = "Langue";
+"System Default" = "Par défaut du système";
+"Restart the app to apply language changes." = "Redémarrez l'application pour appliquer le changement de langue.";
+
+/* Settings - Bypass */
+"Bypass Method" = "Méthode de contournement";
+"DNS Server" = "Serveur DNS";
+"Custom" = "Personnalisé";
+"Custom DNS" = "DNS personnalisé";
+"Use DNS over HTTPS (DoH)" = "Utiliser DNS via HTTPS (DoH)";
+"Port" = "Port";
+"Configure System Proxy" = "Configurer le proxy système";
+"System proxy will route traffic through SpoofDPI automatically." = "Le proxy système acheminera automatiquement le trafic via SpoofDPI.";
+"Installation Status" = "Statut de l'installation";
+"Installed" = "Installé";
+"Not Installed" = "Non installé";
+"Optional" = "Optionnel";
+
+/* Settings - Logs */
+"No Logs" = "Aucun journal";
+"Connection logs will appear here." = "Les journaux de connexion apparaîtront ici.";
+"Clear Logs" = "Effacer les journaux";
+
+/* Bypass Methods */
+"Lightweight DPI bypass proxy. Recommended for most users." = "Proxy léger de contournement DPI. Recommandé pour la plupart des utilisateurs.";
+"Advanced DPI bypass with multiple strategies. For complex filtering." = "Contournement DPI avancé avec plusieurs stratégies. Pour les filtrages complexes.";

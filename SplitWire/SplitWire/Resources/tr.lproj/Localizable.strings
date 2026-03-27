@@ -25,6 +25,10 @@
 "About" = "Hakkında";
 "GitHub Repository" = "GitHub Deposu";
 
+"Language" = "Dil";
+"System Default" = "Sistem Varsayılanı";
+"Restart the app to apply language changes." = "Dil değişikliğini uygulamak için uygulamayı yeniden başlatın.";
+
 /* Settings - Bypass */
 "Bypass Method" = "Bypass Yöntemi";
 "DNS Server" = "DNS Sunucusu";

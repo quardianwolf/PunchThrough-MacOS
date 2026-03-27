@@ -7,19 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		001A0001289A0001 /* SplitWireApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0002289A0001; };
-		001A0003289A0001 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0004289A0001; };
-		001A0005289A0001 /* BypassMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0006289A0001; };
-		001A0007289A0001 /* ConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0008289A0001; };
-		001A0009289A0001 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A000A289A0001; };
-		001A000B289A0001 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A000C289A0001; };
-		001A000D289A0001 /* StatusIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A000E289A0001; };
-		001A000F289A0001 /* BypassService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0010289A0001; };
-		001A0011289A0001 /* ProcessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0012289A0001; };
-		001A0013289A0001 /* SpoofDPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0014289A0001; };
-		001A0017289A0001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 001A0018289A0001; };
-		001A001C289A0001 /* HelperConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A001D289A0001; };
-		001A001E289A0001 /* HelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A001F289A0001; };
+		001A0001289A0001 /* SplitWireApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0002289A0001 /* SplitWireApp.swift */; };
+		001A0003289A0001 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0004289A0001 /* AppState.swift */; };
+		001A0005289A0001 /* BypassMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0006289A0001 /* BypassMethod.swift */; };
+		001A0007289A0001 /* ConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0008289A0001 /* ConnectionStatus.swift */; };
+		001A0009289A0001 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A000A289A0001 /* MenuBarView.swift */; };
+		001A000B289A0001 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A000C289A0001 /* SettingsView.swift */; };
+		001A000D289A0001 /* StatusIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A000E289A0001 /* StatusIndicator.swift */; };
+		001A000F289A0001 /* BypassService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0010289A0001 /* BypassService.swift */; };
+		001A0011289A0001 /* ProcessManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0012289A0001 /* ProcessManager.swift */; };
+		001A0013289A0001 /* SpoofDPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A0014289A0001 /* SpoofDPIService.swift */; };
+		001A0017289A0001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 001A0018289A0001 /* Localizable.strings */; };
+		001A001C289A0001 /* HelperConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A001D289A0001 /* HelperConnection.swift */; };
+		001A001E289A0001 /* HelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A001F289A0001 /* HelperProtocol.swift */; };
+		773F3C502F7604570015A5A3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 773F3C4E2F7604570015A5A3 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		001A001D289A0001 /* HelperConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperConnection.swift; sourceTree = "<group>"; };
 		001A001F289A0001 /* HelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HelperProtocol.swift; path = SplitWireHelper/HelperProtocol.swift; sourceTree = SOURCE_ROOT; };
 		001A0020289A0001 /* SplitWire.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SplitWire.entitlements; sourceTree = "<group>"; };
+		773F3C4D2F7604570015A5A3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,9 +120,18 @@
 		001AFFF7289A0000 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				773F3C4F2F7604570015A5A3 /* fr.lproj */,
 				001A0018289A0001 /* Localizable.strings */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		773F3C4F2F7604570015A5A3 /* fr.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				773F3C4E2F7604570015A5A3 /* Localizable.strings */,
+			);
+			path = fr.lproj;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -166,6 +177,7 @@
 				en,
 				Base,
 				tr,
+				fr,
 			);
 			mainGroup = 001AFFF1289A0000;
 			productRefGroup = 001AFFF3289A0000 /* Products */;
@@ -183,6 +195,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				001A0017289A0001 /* Localizable.strings in Resources */,
+				773F3C502F7604570015A5A3 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +229,14 @@
 			children = (
 				001A0019289A0001 /* en */,
 				001A001A289A0001 /* tr */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		773F3C4E2F7604570015A5A3 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				773F3C4D2F7604570015A5A3 /* fr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

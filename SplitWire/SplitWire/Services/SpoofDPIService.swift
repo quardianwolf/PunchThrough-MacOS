@@ -75,6 +75,7 @@ actor SpoofDPIService {
         }
 
         // Build arguments - Turkish ISP bypass settings
+        // Requires SpoofDPI v1.2.1+ for --https-split-mode and --policy-auto
         var arguments: [String] = [
             "--listen-addr", "127.0.0.1:\(port)",
             "--dns-addr", "\(dnsAddress):53",
@@ -90,9 +91,6 @@ actor SpoofDPIService {
 
         let fullCommand = "\(binaryPath) \(arguments.joined(separator: " "))"
         log("Full command: \(fullCommand)")
-
-        // Method 1: Try direct execution
-        log("Trying direct Process execution...")
 
         let process = Process()
         process.executableURL = URL(fileURLWithPath: binaryPath)
@@ -136,11 +134,16 @@ actor SpoofDPIService {
                 let exitCode = process.terminationStatus
                 log("Process exited early with code: \(exitCode)")
 
-                if let stderrContent = try? String(contentsOf: stderrFile, encoding: .utf8) {
-                    log("STDERR content: \(stderrContent)")
-                }
+                let stderrContent = (try? String(contentsOf: stderrFile, encoding: .utf8)) ?? ""
+                log("STDERR content: \(stderrContent)")
+
                 if let stdoutContent = try? String(contentsOf: stdoutFile, encoding: .utf8) {
                     log("STDOUT content: \(stdoutContent)")
+                }
+
+                // Check if it's a flag compatibility issue
+                if stderrContent.contains("flag provided but not defined") {
+                    throw SpoofDPIError.outdatedVersion
                 }
 
                 throw SpoofDPIError.failedToStart
@@ -159,7 +162,6 @@ actor SpoofDPIService {
 
         if !proxyReady {
             log("ERROR: SpoofDPI process is running but not listening on port \(port) after \(maxAttempts) attempts")
-            // Kill the process since it's not working properly
             process.terminate()
             currentProcess = nil
             throw SpoofDPIError.failedToStart
@@ -377,6 +379,7 @@ enum SpoofDPIError: LocalizedError {
     case failedToStart
     case failedToStop
     case portInUse(Int)
+    case outdatedVersion
 
     var errorDescription: String? {
         switch self {
@@ -388,6 +391,8 @@ enum SpoofDPIError: LocalizedError {
             return "Failed to stop SpoofDPI"
         case .portInUse(let port):
             return "Port \(port) is already in use. Close other applications using this port."
+        case .outdatedVersion:
+            return "SpoofDPI is outdated. Please update: brew upgrade spoofdpi"
         }
     }
 }

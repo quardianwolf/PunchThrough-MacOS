@@ -45,6 +45,24 @@ struct GeneralSettingsView: View {
             }
 
             Section {
+                Picker(String(localized: "Language"), selection: $state.appLanguage) {
+                    ForEach(AppLanguage.allCases) { lang in
+                        Text(lang.displayName).tag(lang)
+                    }
+                }
+                .onChange(of: appState.appLanguage) { _, newValue in
+                    newValue.apply()
+                    appState.addLog("Language changed. Restart app to apply.", level: .info)
+                }
+
+                Text(String(localized: "Restart the app to apply language changes."))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text(String(localized: "Language"))
+            }
+
+            Section {
                 HStack {
                     Text(String(localized: "Status"))
                     Spacer()
@@ -80,7 +98,7 @@ struct GeneralSettingsView: View {
                         .foregroundStyle(.secondary)
                 }
 
-                Link(destination: URL(string: "https://github.com/quardianwolf/SplitWire-Turkey-MacOS")!) {
+                Link(destination: URL(string: "https://github.com/quardianwolf/SplitWire-MacOS")!) {
                     HStack {
                         Text(String(localized: "GitHub Repository"))
                         Spacer()
