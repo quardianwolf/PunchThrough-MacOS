@@ -7,18 +7,58 @@ final class AppState {
     var connectionStatus: ConnectionStatus = .disconnected
     var isProcessing: Bool = false
 
-    // MARK: - Configuration
+    // MARK: - Configuration (persisted to UserDefaults)
     var selectedMethod: BypassMethod = .spoofDPI
-    var dnsServer: DNSServer = .google
-    var customDNS: String = ""
-    var spoofDPIPort: Int = 8080
-    var enableDoH: Bool = true
-    var enableSystemProxy: Bool = true
+    var dnsServer: DNSServer {
+        didSet { UserDefaults.standard.set(dnsServer.rawValue, forKey: Keys.dnsServer) }
+    }
+    var customDNS: String {
+        didSet { UserDefaults.standard.set(customDNS, forKey: Keys.customDNS) }
+    }
+    var spoofDPIPort: Int {
+        didSet { UserDefaults.standard.set(spoofDPIPort, forKey: Keys.spoofDPIPort) }
+    }
+    var enableDoH: Bool {
+        didSet { UserDefaults.standard.set(enableDoH, forKey: Keys.enableDoH) }
+    }
+    var enableSystemProxy: Bool {
+        didSet { UserDefaults.standard.set(enableSystemProxy, forKey: Keys.enableSystemProxy) }
+    }
     var launchAtLogin: Bool = false
     var appLanguage: AppLanguage = AppLanguage.current()
 
     // MARK: - Logs
     var logs: [LogEntry] = []
+
+    // MARK: - UserDefaults Keys
+    private enum Keys {
+        static let dnsServer = "dnsServer"
+        static let customDNS = "customDNS"
+        static let spoofDPIPort = "spoofDPIPort"
+        static let enableDoH = "enableDoH"
+        static let enableSystemProxy = "enableSystemProxy"
+    }
+
+    // MARK: - Init (loads persisted settings)
+    init() {
+        let defaults = UserDefaults.standard
+
+        // Default DNS to Quad9 if nothing saved (privacy-friendly default)
+        if let saved = defaults.string(forKey: Keys.dnsServer),
+           let server = DNSServer(rawValue: saved) {
+            self.dnsServer = server
+        } else {
+            self.dnsServer = .quad9
+        }
+
+        self.customDNS = defaults.string(forKey: Keys.customDNS) ?? ""
+
+        let savedPort = defaults.integer(forKey: Keys.spoofDPIPort)
+        self.spoofDPIPort = savedPort > 0 ? savedPort : 8080
+
+        self.enableDoH = defaults.object(forKey: Keys.enableDoH) as? Bool ?? true
+        self.enableSystemProxy = defaults.object(forKey: Keys.enableSystemProxy) as? Bool ?? true
+    }
 
     // MARK: - Computed Properties
     var statusIcon: String {

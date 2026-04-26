@@ -5,9 +5,13 @@ import Darwin
 actor SpoofDPIService {
     private var currentProcess: Process?
 
-    // Log file on desktop
-    private let logFile = FileManager.default.homeDirectoryForCurrentUser
-        .appendingPathComponent("Desktop/punchthrough_debug.log")
+    // Log file in standard macOS location: ~/Library/Logs/PunchThrough/
+    private let logFile: URL = {
+        let logsDir = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Library/Logs/PunchThrough", isDirectory: true)
+        try? FileManager.default.createDirectory(at: logsDir, withIntermediateDirectories: true)
+        return logsDir.appendingPathComponent("punchthrough_debug.log")
+    }()
 
     private func log(_ message: String) {
         let timestamp = ISO8601DateFormatter().string(from: Date())
@@ -200,10 +204,11 @@ actor SpoofDPIService {
         process.executableURL = URL(fileURLWithPath: binaryPath)
         process.arguments = arguments
 
-        let stdoutFile = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("Desktop/spoofdpi_stdout.log")
-        let stderrFile = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("Desktop/spoofdpi_stderr.log")
+        let logsDir = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Library/Logs/PunchThrough", isDirectory: true)
+        try? FileManager.default.createDirectory(at: logsDir, withIntermediateDirectories: true)
+        let stdoutFile = logsDir.appendingPathComponent("spoofdpi_stdout.log")
+        let stderrFile = logsDir.appendingPathComponent("spoofdpi_stderr.log")
 
         FileManager.default.createFile(atPath: stdoutFile.path, contents: nil)
         FileManager.default.createFile(atPath: stderrFile.path, contents: nil)
