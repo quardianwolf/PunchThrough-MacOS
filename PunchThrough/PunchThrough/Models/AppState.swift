@@ -16,13 +16,24 @@ final class AppState {
         didSet { UserDefaults.standard.set(customDNS, forKey: Keys.customDNS) }
     }
     var spoofDPIPort: Int {
-        didSet { UserDefaults.standard.set(spoofDPIPort, forKey: Keys.spoofDPIPort) }
+        didSet {
+            // Clamp to valid user-port range (avoid privileged 0-1023 and out-of-range)
+            let clamped = max(1024, min(65535, spoofDPIPort))
+            if clamped != spoofDPIPort {
+                spoofDPIPort = clamped
+                return // didSet will fire again with the clamped value
+            }
+            UserDefaults.standard.set(spoofDPIPort, forKey: Keys.spoofDPIPort)
+        }
     }
     var enableDoH: Bool {
         didSet { UserDefaults.standard.set(enableDoH, forKey: Keys.enableDoH) }
     }
     var enableSystemProxy: Bool {
         didSet { UserDefaults.standard.set(enableSystemProxy, forKey: Keys.enableSystemProxy) }
+    }
+    var autoConnect: Bool {
+        didSet { UserDefaults.standard.set(autoConnect, forKey: Keys.autoConnect) }
     }
     var launchAtLogin: Bool = false
     var appLanguage: AppLanguage = AppLanguage.current()
@@ -37,6 +48,7 @@ final class AppState {
         static let spoofDPIPort = "spoofDPIPort"
         static let enableDoH = "enableDoH"
         static let enableSystemProxy = "enableSystemProxy"
+        static let autoConnect = "autoConnect"
     }
 
     // MARK: - Init (loads persisted settings)
@@ -58,6 +70,9 @@ final class AppState {
 
         self.enableDoH = defaults.object(forKey: Keys.enableDoH) as? Bool ?? true
         self.enableSystemProxy = defaults.object(forKey: Keys.enableSystemProxy) as? Bool ?? true
+
+        // Default auto-connect to ON for new installs
+        self.autoConnect = defaults.object(forKey: Keys.autoConnect) as? Bool ?? true
     }
 
     // MARK: - Computed Properties

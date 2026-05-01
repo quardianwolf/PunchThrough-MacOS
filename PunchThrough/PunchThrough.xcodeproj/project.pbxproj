@@ -21,6 +21,7 @@
 		001A001C289A0001 /* HelperConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A001D289A0001 /* HelperConnection.swift */; };
 		001A001E289A0001 /* HelperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A001F289A0001 /* HelperProtocol.swift */; };
 		773F3C502F7604570015A5A3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 773F3C4E2F7604570015A5A3 /* Localizable.strings */; };
+		AABBCCDD00000001 /* spoofdpi in Resources */ = {isa = PBXBuildFile; fileRef = AABBCCDD00000002 /* spoofdpi */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		001A001F289A0001 /* HelperProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HelperProtocol.swift; path = PunchThroughHelper/HelperProtocol.swift; sourceTree = SOURCE_ROOT; };
 		001A0020289A0001 /* PunchThrough.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PunchThrough.entitlements; sourceTree = "<group>"; };
 		773F3C4D2F7604570015A5A3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = Localizable.strings; sourceTree = "<group>"; };
+		AABBCCDD00000002 /* spoofdpi */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = spoofdpi; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +124,7 @@
 			children = (
 				773F3C4F2F7604570015A5A3 /* fr.lproj */,
 				001A0018289A0001 /* Localizable.strings */,
+				AABBCCDD00000002 /* spoofdpi */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -196,6 +199,7 @@
 			files = (
 				001A0017289A0001 /* Localizable.strings in Resources */,
 				773F3C502F7604570015A5A3 /* Localizable.strings in Resources */,
+				AABBCCDD00000001 /* spoofdpi in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

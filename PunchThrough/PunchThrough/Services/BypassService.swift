@@ -70,6 +70,10 @@ final class BypassService {
     // MARK: - Installation Checks
 
     func checkSpoofDPIInstalled() async -> Bool {
+        // Bundled binary always available, but keep fallback check for sanity
+        if Bundle.main.path(forResource: "spoofdpi", ofType: nil) != nil {
+            return true
+        }
         let paths = [
             "/opt/homebrew/bin/spoofdpi",
             "/usr/local/bin/spoofdpi"

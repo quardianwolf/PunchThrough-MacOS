@@ -16,15 +16,11 @@ Built with Swift/SwiftUI. Powered by [SpoofDPI](https://github.com/xvzc/SpoofDPI
 
 ## Quick Start
 
-```bash
-brew install spoofdpi
-```
-
-Download `PunchThrough.app` from [Releases](https://github.com/quardianwolf/PunchThrough-MacOS/releases), move to `/Applications`, and launch.
+Download `PunchThrough.app` from [Releases](https://github.com/quardianwolf/PunchThrough-MacOS/releases), move to `/Applications`, and launch. SpoofDPI is bundled — no separate install needed.
 
 > **"Not compatible" error?** Run `xattr -cr /Applications/PunchThrough.app` in Terminal.
 
-Requires macOS 14.0+ and SpoofDPI v1.2.1+.
+Requires macOS 14.0+ (Universal: Apple Silicon & Intel).
 
 See [full documentation](PunchThrough/README.md) for build instructions, settings, and troubleshooting.
 

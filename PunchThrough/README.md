@@ -21,27 +21,10 @@ A native macOS menu bar application that bypasses DPI (Deep Packet Inspection) r
 ## Requirements
 
 - macOS 14.0 (Sonoma) or later
-- [SpoofDPI](https://github.com/xvzc/SpoofDPI) v1.2.1+ (required)
+
+SpoofDPI is bundled with the app — no separate installation needed.
 
 ## Installation
-
-### 1. Install SpoofDPI (required)
-
-```bash
-# Install Homebrew if you don't have it
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# Install SpoofDPI
-brew install spoofdpi
-```
-
-Verify:
-```bash
-which spoofdpi
-# /opt/homebrew/bin/spoofdpi (Apple Silicon) or /usr/local/bin/spoofdpi (Intel)
-```
-
-### 2. Install PunchThrough
 
 #### Pre-built (recommended):
 Download `PunchThrough.app` from [Releases](https://github.com/quardianwolf/PunchThrough-MacOS/releases) and move it to `/Applications`.
@@ -96,12 +79,6 @@ PunchThrough runs a local proxy on your Mac (127.0.0.1:8080) and routes your tra
 - No subscription, no account, no data collection
 
 ## Troubleshooting
-
-### SpoofDPI outdated or not installed
-```bash
-brew install spoofdpi    # install
-brew upgrade spoofdpi    # update to latest
-```
 
 ### Port in use
 ```bash

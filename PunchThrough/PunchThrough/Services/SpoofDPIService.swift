@@ -40,22 +40,26 @@ actor SpoofDPIService {
     ) async throws {
         log("=== START ATTEMPT ===")
 
-        // Find SpoofDPI binary
-        let possiblePaths = [
-            "/opt/homebrew/bin/spoofdpi",
-            "/usr/local/bin/spoofdpi",
-        ]
-
-        log("Checking paths: \(possiblePaths)")
-
+        // Prefer bundled SpoofDPI v1.3.0 (avoids breakage from brew upgrades)
+        // Fall back to system paths only if bundle resource is missing
         var spoofDPIPath: String?
-        for path in possiblePaths {
-            let exists = FileManager.default.fileExists(atPath: path)
-            let executable = FileManager.default.isExecutableFile(atPath: path)
-            log("Path \(path): exists=\(exists), executable=\(executable)")
-            if executable {
-                spoofDPIPath = path
-                break
+
+        if let bundled = Bundle.main.path(forResource: "spoofdpi", ofType: nil) {
+            log("Found bundled spoofdpi at: \(bundled)")
+            spoofDPIPath = bundled
+        } else {
+            let fallbackPaths = [
+                "/opt/homebrew/bin/spoofdpi",
+                "/usr/local/bin/spoofdpi",
+            ]
+            log("Bundled binary not found, checking fallback paths: \(fallbackPaths)")
+            for path in fallbackPaths {
+                let executable = FileManager.default.isExecutableFile(atPath: path)
+                log("Path \(path): executable=\(executable)")
+                if executable {
+                    spoofDPIPath = path
+                    break
+                }
             }
         }
 
@@ -64,7 +68,7 @@ actor SpoofDPIService {
             throw SpoofDPIError.notInstalled
         }
 
-        log("Found spoofdpi at: \(binaryPath)")
+        log("Using spoofdpi at: \(binaryPath)")
 
         // Stop existing process and kill all spoofdpi instances (but don't disable proxy yet)
         await stop(appState: appState, disableProxy: false)

@@ -18,6 +18,7 @@
 "Logs" = "Günlükler";
 "Startup" = "Başlangıç";
 "Launch at Login" = "Giriş Yapınca Başlat";
+"Auto-connect on launch" = "Açılışta otomatik bağlan";
 "Connection" = "Bağlantı";
 "Status" = "Durum";
 "Method" = "Yöntem";
@@ -36,6 +37,7 @@
 "Custom DNS" = "Özel DNS";
 "Use DNS over HTTPS (DoH)" = "DNS over HTTPS (DoH) Kullan";
 "Port" = "Port";
+"Valid range: 1024–65535" = "Geçerli aralık: 1024–65535";
 "Configure System Proxy" = "Sistem Proxy'sini Yapılandır";
 "System proxy will route traffic through SpoofDPI automatically." = "Sistem proxy'si trafiği otomatik olarak SpoofDPI üzerinden yönlendirecektir.";
 "Installation Status" = "Kurulum Durumu";

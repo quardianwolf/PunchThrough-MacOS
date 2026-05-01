@@ -18,6 +18,7 @@
 "Logs" = "Journaux";
 "Startup" = "Démarrage";
 "Launch at Login" = "Lancer à la connexion";
+"Auto-connect on launch" = "Connexion automatique au lancement";
 "Connection" = "Connexion";
 "Status" = "Statut";
 "Method" = "Méthode";
@@ -36,6 +37,7 @@
 "Custom DNS" = "DNS personnalisé";
 "Use DNS over HTTPS (DoH)" = "Utiliser DNS via HTTPS (DoH)";
 "Port" = "Port";
+"Valid range: 1024–65535" = "Plage valide : 1024–65535";
 "Configure System Proxy" = "Configurer le proxy système";
 "System proxy will route traffic through SpoofDPI automatically." = "Le proxy système acheminera automatiquement le trafic via SpoofDPI.";
 "Installation Status" = "Statut de l'installation";

@@ -40,6 +40,7 @@ struct GeneralSettingsView: View {
                     .onChange(of: launchAtLogin) { _, newValue in
                         setLaunchAtLogin(newValue)
                     }
+                Toggle(String(localized: "Auto-connect on launch"), isOn: $state.autoConnect)
             } header: {
                 Text(String(localized: "Startup"))
             }
@@ -133,6 +134,7 @@ struct GeneralSettingsView: View {
 // MARK: - Bypass Settings
 struct BypassSettingsView: View {
     @Environment(AppState.self) private var appState
+    @State private var portReconnectTask: Task<Void, Never>?
 
     var body: some View {
         @Bindable var state = appState
@@ -162,7 +164,14 @@ struct BypassSettingsView: View {
                     TextField("", value: $state.spoofDPIPort, format: .number)
                         .frame(width: 80)
                         .textFieldStyle(.roundedBorder)
+                        .onChange(of: appState.spoofDPIPort) { _, _ in
+                            scheduleReconnectIfNeeded()
+                        }
                 }
+
+                Text(String(localized: "Valid range: 1024–65535"))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
 
                 Toggle(String(localized: "Configure System Proxy"), isOn: $state.enableSystemProxy)
 
@@ -180,6 +189,20 @@ struct BypassSettingsView: View {
             }
         }
         .formStyle(.grouped)
+    }
+
+    /// Debounced reconnect: wait 1.5s after the last edit, then reconnect if currently active.
+    private func scheduleReconnectIfNeeded() {
+        portReconnectTask?.cancel()
+        portReconnectTask = Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(1500))
+            guard !Task.isCancelled else { return }
+            if case .connected = appState.connectionStatus {
+                appState.addLog("Port changed, reconnecting...", level: .info)
+                await BypassService.shared.disconnect(appState: appState)
+                await BypassService.shared.connect(appState: appState)
+            }
+        }
     }
 }
 

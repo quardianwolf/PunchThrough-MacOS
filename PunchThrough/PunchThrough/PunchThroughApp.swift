@@ -5,6 +5,19 @@ struct PunchThroughApp: App {
     @State private var appState = AppState()
     @State private var showSettings = false
 
+    init() {
+        // Auto-connect on launch if enabled (default ON for new installs)
+        let state = AppState()
+        if state.autoConnect {
+            Task { @MainActor in
+                // Slight delay to let the menu bar UI initialize before attempting connection
+                try? await Task.sleep(for: .milliseconds(500))
+                await BypassService.shared.connect(appState: state)
+            }
+        }
+        _appState = State(initialValue: state)
+    }
+
     var body: some Scene {
         MenuBarExtra {
             MenuBarContent(appState: appState, showSettings: $showSettings)
