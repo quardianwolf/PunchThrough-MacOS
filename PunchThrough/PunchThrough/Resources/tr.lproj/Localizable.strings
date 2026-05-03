@@ -19,6 +19,12 @@
 "Startup" = "Başlangıç";
 "Launch at Login" = "Giriş Yapınca Başlat";
 "Auto-connect on launch" = "Açılışta otomatik bağlan";
+"Logging" = "Günlükleme";
+"SpoofDPI Log Level" = "SpoofDPI Günlük Seviyesi";
+"Use Debug to troubleshoot connection issues." = "Bağlantı sorunlarını teşhis etmek için Debug seçin.";
+"Advanced" = "Gelişmiş";
+"Open SpoofDPI Config Folder" = "SpoofDPI Yapılandırma Klasörünü Aç";
+"For advanced users. Edit ~/.config/spoofdpi/spoofdpi.toml to customize SpoofDPI behavior. CLI flags from this app override TOML values." = "İleri seviye kullanıcılar için. SpoofDPI davranışını özelleştirmek için ~/.config/spoofdpi/spoofdpi.toml dosyasını düzenleyin. Bu uygulamanın CLI bayrakları TOML değerlerini geçersiz kılar.";
 "Connection" = "Bağlantı";
 "Status" = "Durum";
 "Method" = "Yöntem";

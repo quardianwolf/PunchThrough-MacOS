@@ -64,6 +64,19 @@ struct GeneralSettingsView: View {
             }
 
             Section {
+                Picker(String(localized: "SpoofDPI Log Level"), selection: $state.logLevel) {
+                    ForEach(LogLevelOption.allCases) { level in
+                        Text(level.displayName).tag(level)
+                    }
+                }
+                Text(String(localized: "Use Debug to troubleshoot connection issues."))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text(String(localized: "Logging"))
+            }
+
+            Section {
                 HStack {
                     Text(String(localized: "Status"))
                     Spacer()
@@ -183,12 +196,58 @@ struct BypassSettingsView: View {
             }
 
             Section {
+                Button {
+                    openSpoofDPIConfigFolder()
+                } label: {
+                    HStack {
+                        Image(systemName: "folder")
+                        Text(String(localized: "Open SpoofDPI Config Folder"))
+                    }
+                }
+                Text(String(localized: "For advanced users. Edit ~/.config/spoofdpi/spoofdpi.toml to customize SpoofDPI behavior. CLI flags from this app override TOML values."))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text(String(localized: "Advanced"))
+            }
+
+            Section {
                 InstallationStatusView()
             } header: {
                 Text(String(localized: "Installation Status"))
             }
         }
         .formStyle(.grouped)
+    }
+
+    /// Open ~/.config/spoofdpi/ in Finder. Creates the folder + sample TOML if missing.
+    private func openSpoofDPIConfigFolder() {
+        let configDir = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent(".config/spoofdpi", isDirectory: true)
+        let configFile = configDir.appendingPathComponent("spoofdpi.toml")
+
+        do {
+            try FileManager.default.createDirectory(at: configDir, withIntermediateDirectories: true)
+            if !FileManager.default.fileExists(atPath: configFile.path) {
+                let sample = """
+                # SpoofDPI advanced configuration
+                # See: https://spoofdpi.xvzc.dev
+                # NOTE: CLI flags from PunchThrough override values set here.
+
+                # log-level = "info"  # debug | info | warn | error
+
+                # [https]
+                # disorder = true
+                # chunk-size = 35
+                # fake-count = 0
+                # split-mode = "sni"  # sni | random | chunk | custom | none
+                """
+                try sample.write(to: configFile, atomically: true, encoding: .utf8)
+            }
+            NSWorkspace.shared.open(configDir)
+        } catch {
+            appState.addLog("Failed to open config folder: \(error.localizedDescription)", level: .error)
+        }
     }
 
     /// Debounced reconnect: wait 1.5s after the last edit, then reconnect if currently active.

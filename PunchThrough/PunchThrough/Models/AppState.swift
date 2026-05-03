@@ -35,6 +35,9 @@ final class AppState {
     var autoConnect: Bool {
         didSet { UserDefaults.standard.set(autoConnect, forKey: Keys.autoConnect) }
     }
+    var logLevel: LogLevelOption {
+        didSet { UserDefaults.standard.set(logLevel.rawValue, forKey: Keys.logLevel) }
+    }
     var launchAtLogin: Bool = false
     var appLanguage: AppLanguage = AppLanguage.current()
 
@@ -49,6 +52,7 @@ final class AppState {
         static let enableDoH = "enableDoH"
         static let enableSystemProxy = "enableSystemProxy"
         static let autoConnect = "autoConnect"
+        static let logLevel = "logLevel"
     }
 
     // MARK: - Init (loads persisted settings)
@@ -73,6 +77,14 @@ final class AppState {
 
         // Default auto-connect to ON for new installs
         self.autoConnect = defaults.object(forKey: Keys.autoConnect) as? Bool ?? true
+
+        // Default log level: info
+        if let saved = defaults.string(forKey: Keys.logLevel),
+           let level = LogLevelOption(rawValue: saved) {
+            self.logLevel = level
+        } else {
+            self.logLevel = .info
+        }
     }
 
     // MARK: - Computed Properties
@@ -185,6 +197,25 @@ enum AppLanguage: String, CaseIterable, Identifiable {
             return .system
         }
         return AppLanguage.allCases.first { $0.rawValue == first } ?? .system
+    }
+}
+
+/// SpoofDPI process log verbosity (passed to `--log-level`)
+enum LogLevelOption: String, CaseIterable, Identifiable {
+    case debug
+    case info
+    case warn
+    case error
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .debug: return "Debug"
+        case .info: return "Info"
+        case .warn: return "Warn"
+        case .error: return "Error"
+        }
     }
 }
 

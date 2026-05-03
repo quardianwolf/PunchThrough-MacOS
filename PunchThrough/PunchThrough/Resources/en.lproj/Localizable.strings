@@ -19,6 +19,12 @@
 "Startup" = "Startup";
 "Launch at Login" = "Launch at Login";
 "Auto-connect on launch" = "Auto-connect on launch";
+"Logging" = "Logging";
+"SpoofDPI Log Level" = "SpoofDPI Log Level";
+"Use Debug to troubleshoot connection issues." = "Use Debug to troubleshoot connection issues.";
+"Advanced" = "Advanced";
+"Open SpoofDPI Config Folder" = "Open SpoofDPI Config Folder";
+"For advanced users. Edit ~/.config/spoofdpi/spoofdpi.toml to customize SpoofDPI behavior. CLI flags from this app override TOML values." = "For advanced users. Edit ~/.config/spoofdpi/spoofdpi.toml to customize SpoofDPI behavior. CLI flags from this app override TOML values.";
 "Connection" = "Connection";
 "Status" = "Status";
 "Method" = "Method";

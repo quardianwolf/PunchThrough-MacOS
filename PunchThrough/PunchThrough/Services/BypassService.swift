@@ -36,6 +36,7 @@ final class BypassService {
                     dnsAddress: appState.effectiveDNS,
                     enableDoH: appState.enableDoH,
                     enableSystemProxy: appState.enableSystemProxy,
+                    logLevel: appState.logLevel.rawValue,
                     appState: appState
                 )
 

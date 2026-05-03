@@ -36,6 +36,7 @@ actor SpoofDPIService {
         dnsAddress: String,
         enableDoH: Bool,
         enableSystemProxy: Bool,
+        logLevel: String = "info",
         appState: AppState
     ) async throws {
         log("=== START ATTEMPT ===")
@@ -82,10 +83,21 @@ actor SpoofDPIService {
             throw SpoofDPIError.portInUse(port)
         }
 
+        // If user has a custom TOML config, pass it explicitly via --config.
+        // CLI flags below still override values set in the TOML.
+        let userConfigPath = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent(".config/spoofdpi/spoofdpi.toml").path
+        var configArgs: [String] = []
+        if FileManager.default.fileExists(atPath: userConfigPath) {
+            configArgs = ["--config", userConfigPath]
+            log("Using user TOML config: \(userConfigPath)")
+        }
+
         // Build argument sets - try enhanced flags first, fall back to basic
-        var enhancedArgs: [String] = [
+        var enhancedArgs: [String] = configArgs + [
             "--listen-addr", "127.0.0.1:\(port)",
             "--dns-addr", "\(dnsAddress):53",
+            "--log-level", logLevel,
             "--https-disorder",
             "--https-chunk-size", "1",
             "--https-split-mode", "random",
@@ -95,9 +107,10 @@ actor SpoofDPIService {
             enhancedArgs.append(contentsOf: ["--dns-mode", "https"])
         }
 
-        var basicArgs: [String] = [
+        var basicArgs: [String] = configArgs + [
             "--listen-addr", "127.0.0.1:\(port)",
             "--dns-addr", "\(dnsAddress):53",
+            "--log-level", logLevel,
             "--https-disorder",
             "--https-chunk-size", "1",
             "--https-split-mode", "random"
