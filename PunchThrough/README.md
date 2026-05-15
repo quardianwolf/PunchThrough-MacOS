@@ -11,18 +11,21 @@ A native macOS menu bar application that bypasses DPI (Deep Packet Inspection) r
 ## Features
 
 - **One-click connection** - Connect/Disconnect from the menu bar
-- **Automatic proxy setup** - HTTP and HTTPS proxy configured automatically
-- **Auto policy detection** - Automatically detects and bypasses blocked sites
-- **DNS over HTTPS** - Secure encrypted DNS queries
-- **Multiple DNS options** - Google, Cloudflare, Quad9, or custom DNS
-- **Multi-language** - English, Turkish, French (selectable in Settings)
-- **Lightweight and fast** - Native Swift/SwiftUI, runs in the menu bar
+- **Two bundled bypass engines** — choose in Settings → Bypass:
+  - **SpoofDPI** (default) — userspace HTTP proxy. Zero setup, no admin needed.
+  - **Zapret (tpws)** — transparent TCP proxy. One-time admin install. Keeps app
+    updaters working (e.g. Discord desktop in-app updates).
+- **Automatic proxy setup** — system HTTP/HTTPS proxy configured for you (SpoofDPI engine)
+- **DNS over HTTPS** — Secure encrypted DNS queries
+- **Multiple DNS options** — Google, Cloudflare, Quad9, or custom DNS
+- **Multi-language** — English, Turkish, French (selectable in Settings)
+- **Auto-connect on launch** + **Launch at login**
 
 ## Requirements
 
 - macOS 14.0 (Sonoma) or later
 
-SpoofDPI is bundled with the app — no separate installation needed.
+Both bypass engines (SpoofDPI and tpws) are bundled with the app — no separate installation needed.
 
 ## Installation
 
@@ -58,19 +61,33 @@ open /Applications/PunchThrough.app
 
 ### Settings
 
-- **General** - Launch at login, language selection, connection status
-- **Bypass** - DNS server, DoH, proxy port, installation status
+- **General** - Launch at login, auto-connect, language, log level (SpoofDPI engine)
+- **Bypass** - Engine picker, bypass mode, DNS server, DoH, port (SpoofDPI), Zapret install/uninstall
 - **Logs** - View and clear connection logs
+
+### When to use which engine
+
+- **SpoofDPI** (default) is enough for most sites. Zero admin, instant on.
+- Switch to **Zapret (tpws)** if you need an app's built-in updater to work alongside
+  the bypass (Discord desktop is the common case — SpoofDPI's TLS fragmentation
+  breaks the Squirrel updater while tpws keeps the TLS payload intact).
 
 ## How It Works
 
-PunchThrough runs a local proxy on your Mac (127.0.0.1:8080) and routes your traffic through it. It works like a local VPN, but instead of encrypting and tunneling all traffic to a remote server, it manipulates how your packets are sent to trick your ISP's DPI (Deep Packet Inspection) system.
+PunchThrough runs a local bypass engine on your Mac and routes traffic through it. It works like a local VPN, but instead of encrypting and tunneling all traffic to a remote server, it manipulates how your packets are sent to trick your ISP's DPI (Deep Packet Inspection) system.
 
-**What it does:**
-1. **Packet Fragmentation** - Splits the HTTPS handshake into tiny chunks so the DPI can't read the destination
-2. **Disorder** - Sends those chunks out of order, further confusing the DPI
-3. **Auto Policy** - Automatically detects which sites are blocked and applies bypass only to those
-4. **DNS over HTTPS** - Encrypts DNS queries so your ISP can't block sites at the DNS level
+**SpoofDPI engine** (default):
+1. Local HTTP proxy on `127.0.0.1:8080`
+2. Splits the HTTPS handshake (SNI) into chunks so DPI can't read the destination
+3. Optionally sends chunks out of order
+4. Encrypts DNS queries via DoH
+
+**Zapret (tpws) engine** (optional):
+1. Transparent TCP proxy via macOS PF (packet filter)
+2. Modifies TCP segmentation without touching the TLS payload — so apps with
+   strict TLS validation (Discord desktop updater, etc.) still work
+3. Runs as root via a one-time installed LaunchDaemon
+4. Auto-detects blocked domains via bundled hostlist
 
 **How is this different from a VPN?**
 - No remote server needed - everything runs locally on your Mac
@@ -80,7 +97,7 @@ PunchThrough runs a local proxy on your Mac (127.0.0.1:8080) and routes your tra
 
 ## Troubleshooting
 
-### Port in use
+### Port in use (SpoofDPI engine)
 ```bash
 lsof -i :8080
 ```
@@ -94,6 +111,20 @@ You can change the port in Settings.
 sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
 ```
 
+### Discord (or other app) updater fails
+SpoofDPI's TLS fragmentation can break apps with strict TLS validation.
+Switch to the **Zapret (tpws)** engine in Settings → Bypass.
+
+### Uninstall the Zapret service
+Settings → Bypass → "Uninstall" button next to the Zapret engine indicator.
+Or manually:
+```bash
+sudo /opt/punchthrough-zapret/init.d/macos/zapret stop
+sudo launchctl unload /Library/LaunchDaemons/com.punchthrough.zapret.plist
+sudo rm -f /Library/LaunchDaemons/com.punchthrough.zapret.plist /etc/sudoers.d/punchthrough-zapret
+sudo rm -rf /opt/punchthrough-zapret
+```
+
 ## Contributing
 
 Contributions and translations are welcome! Feel free to submit a Pull Request.
@@ -104,7 +135,8 @@ MIT License
 
 ## Acknowledgments
 
-- [SpoofDPI](https://github.com/xvzc/SpoofDPI) - DPI bypass engine
+- [SpoofDPI](https://github.com/xvzc/SpoofDPI) - default bypass engine
+- [Zapret / tpws](https://github.com/bol-van/zapret) - transparent TCP proxy engine
 - [@Tetonne](https://github.com/Tetonne) - French translation
 
 ---
