@@ -1,11 +1,13 @@
 import Foundation
 
-/// Main service that orchestrates bypass operations
+/// Main service that orchestrates bypass operations.
+/// Dispatches to the engine selected in AppState (SpoofDPI or tpws/zapret).
 @MainActor
 final class BypassService {
     static let shared = BypassService()
 
     private let spoofDPI = SpoofDPIService()
+    let tpws = TpwsService()
 
     private init() {}
 
@@ -25,6 +27,33 @@ final class BypassService {
     func connect(appState: AppState) async {
         guard appState.connectionStatus.canToggle else { return }
 
+        switch appState.bypassEngine {
+        case .spoofDPI:
+            await connectSpoofDPI(appState: appState)
+        case .tpws:
+            await connectTpws(appState: appState)
+        }
+    }
+
+    func disconnect(appState: AppState) async {
+        guard appState.connectionStatus.canToggle else { return }
+
+        appState.connectionStatus = .disconnecting
+        appState.addLog("Stopping bypass...")
+
+        // Stop whichever engine could be running. Cheap to call both.
+        await spoofDPI.stop(appState: appState)
+        if await tpws.isInstalled() {
+            await tpws.stop(appState: appState)
+        }
+
+        appState.connectionStatus = .disconnected
+        appState.addLog("Disconnected successfully")
+    }
+
+    // MARK: - SpoofDPI engine
+
+    private func connectSpoofDPI(appState: AppState) async {
         appState.connectionStatus = .connecting
         appState.addLog("Starting SpoofDPI...")
 
@@ -37,6 +66,7 @@ final class BypassService {
                     enableDoH: appState.enableDoH,
                     enableSystemProxy: appState.enableSystemProxy,
                     logLevel: appState.logLevel.rawValue,
+                    bypassMode: appState.bypassMode.rawValue,
                     appState: appState
                 )
 
@@ -56,22 +86,33 @@ final class BypassService {
         }
     }
 
-    func disconnect(appState: AppState) async {
-        guard appState.connectionStatus.canToggle else { return }
+    // MARK: - tpws (zapret) engine
 
-        appState.connectionStatus = .disconnecting
-        appState.addLog("Stopping bypass...")
+    private func connectTpws(appState: AppState) async {
+        // tpws uses PF redirect, not system proxy. Make sure SpoofDPI's proxy state
+        // isn't lingering from a previous SpoofDPI session.
+        appState.connectionStatus = .connecting
+        appState.addLog("Starting Zapret (tpws)...")
 
-        await spoofDPI.stop(appState: appState)
+        if !(await tpws.isInstalled()) {
+            appState.connectionStatus = .error("Zapret service not installed")
+            appState.addLog("Zapret service is not installed. Go to Settings → Bypass → Install Zapret Service.", level: .error)
+            return
+        }
 
-        appState.connectionStatus = .disconnected
-        appState.addLog("Disconnected successfully")
+        do {
+            try await tpws.start(appState: appState)
+            appState.connectionStatus = .connected
+            appState.addLog("Successfully connected via Zapret")
+        } catch {
+            appState.connectionStatus = .error(error.localizedDescription)
+            appState.addLog("Zapret start failed: \(error.localizedDescription)", level: .error)
+        }
     }
 
     // MARK: - Installation Checks
 
     func checkSpoofDPIInstalled() async -> Bool {
-        // Bundled binary always available, but keep fallback check for sanity
         if Bundle.main.path(forResource: "spoofdpi", ofType: nil) != nil {
             return true
         }
@@ -80,5 +121,9 @@ final class BypassService {
             "/usr/local/bin/spoofdpi"
         ]
         return paths.contains { FileManager.default.isExecutableFile(atPath: $0) }
+    }
+
+    func checkTpwsInstalled() async -> Bool {
+        await tpws.isInstalled()
     }
 }

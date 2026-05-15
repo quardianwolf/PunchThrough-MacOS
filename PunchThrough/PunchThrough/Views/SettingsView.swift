@@ -63,17 +63,19 @@ struct GeneralSettingsView: View {
                 Text(String(localized: "Language"))
             }
 
-            Section {
-                Picker(String(localized: "SpoofDPI Log Level"), selection: $state.logLevel) {
-                    ForEach(LogLevelOption.allCases) { level in
-                        Text(level.displayName).tag(level)
+            if appState.bypassEngine == .spoofDPI {
+                Section {
+                    Picker(String(localized: "Log Level"), selection: $state.logLevel) {
+                        ForEach(LogLevelOption.allCases) { level in
+                            Text(level.displayName).tag(level)
+                        }
                     }
+                    Text(String(localized: "Use Debug to troubleshoot connection issues."))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } header: {
+                    Text(String(localized: "Logging"))
                 }
-                Text(String(localized: "Use Debug to troubleshoot connection issues."))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            } header: {
-                Text(String(localized: "Logging"))
             }
 
             Section {
@@ -87,9 +89,9 @@ struct GeneralSettingsView: View {
 
                 if case .connected = appState.connectionStatus {
                     HStack {
-                        Text(String(localized: "Method"))
+                        Text(String(localized: "Engine"))
                         Spacer()
-                        Text(appState.selectedMethod.displayName)
+                        Text(appState.bypassEngine.displayName)
                             .foregroundStyle(.secondary)
                     }
 
@@ -148,11 +150,81 @@ struct GeneralSettingsView: View {
 struct BypassSettingsView: View {
     @Environment(AppState.self) private var appState
     @State private var portReconnectTask: Task<Void, Never>?
+    @State private var tpwsInstalled: Bool = false
+    @State private var tpwsBusy: Bool = false
 
     var body: some View {
         @Bindable var state = appState
 
         Form {
+            // MARK: Engine
+            Section {
+                Picker(String(localized: "Engine"), selection: $state.bypassEngine) {
+                    ForEach(BypassEngineOption.allCases) { eng in
+                        Text(eng.displayName).tag(eng)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .onChange(of: appState.bypassEngine) { _, _ in
+                    scheduleReconnectIfNeeded()
+                }
+
+                Text(engineDescription)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                if appState.bypassEngine == .tpws {
+                    HStack {
+                        Image(systemName: tpwsInstalled ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
+                            .foregroundStyle(tpwsInstalled ? .green : .orange)
+                        Text(tpwsInstalled
+                             ? String(localized: "Zapret service installed")
+                             : String(localized: "Zapret service not installed"))
+                            .foregroundStyle(.secondary)
+                            .font(.caption)
+                        Spacer()
+                        if tpwsBusy {
+                            ProgressView().scaleEffect(0.6)
+                        } else if !tpwsInstalled {
+                            Button(String(localized: "Install Service")) {
+                                installZapret()
+                            }
+                            .controlSize(.small)
+                        } else {
+                            Button(String(localized: "Uninstall")) {
+                                uninstallZapret()
+                            }
+                            .controlSize(.small)
+                        }
+                    }
+                }
+            } header: {
+                Text(String(localized: "Bypass Engine"))
+            }
+
+            // MARK: Mode (SpoofDPI only)
+            if appState.bypassEngine == .spoofDPI {
+                Section {
+                    Picker(String(localized: "Mode"), selection: $state.bypassMode) {
+                        ForEach(BypassModeOption.allCases) { mode in
+                            Text(mode.displayName).tag(mode)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .onChange(of: appState.bypassMode) { _, _ in
+                        scheduleReconnectIfNeeded()
+                    }
+
+                    Text(modeDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                } header: {
+                    Text(String(localized: "Bypass Mode"))
+                }
+            }
+
             Section {
                 Picker(String(localized: "DNS Server"), selection: $state.dnsServer) {
                     ForEach(DNSServer.allCases) { server in
@@ -170,54 +242,52 @@ struct BypassSettingsView: View {
                 Text(String(localized: "DNS"))
             }
 
-            Section {
-                HStack {
-                    Text(String(localized: "Port"))
-                    Spacer()
-                    TextField("", value: $state.spoofDPIPort, format: .number)
-                        .frame(width: 80)
-                        .textFieldStyle(.roundedBorder)
-                        .onChange(of: appState.spoofDPIPort) { _, _ in
-                            scheduleReconnectIfNeeded()
-                        }
-                }
-
-                Text(String(localized: "Valid range: 1024–65535"))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                Toggle(String(localized: "Configure System Proxy"), isOn: $state.enableSystemProxy)
-
-                Text(String(localized: "System proxy will route traffic through SpoofDPI automatically."))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            } header: {
-                Text(String(localized: "SpoofDPI Options"))
-            }
-
-            Section {
-                Button {
-                    openSpoofDPIConfigFolder()
-                } label: {
+            if appState.bypassEngine == .spoofDPI {
+                Section {
                     HStack {
-                        Image(systemName: "folder")
-                        Text(String(localized: "Open SpoofDPI Config Folder"))
+                        Text(String(localized: "Port"))
+                        Spacer()
+                        TextField("", value: $state.spoofDPIPort, format: .number)
+                            .frame(width: 80)
+                            .textFieldStyle(.roundedBorder)
+                            .onChange(of: appState.spoofDPIPort) { _, _ in
+                                scheduleReconnectIfNeeded()
+                            }
                     }
+
+                    Text(String(localized: "Valid range: 1024–65535"))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    Toggle(String(localized: "Configure System Proxy"), isOn: $state.enableSystemProxy)
+
+                    Text(String(localized: "System proxy will route traffic through the bypass engine automatically."))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } header: {
+                    Text(String(localized: "Proxy Options"))
                 }
-                Text(String(localized: "For advanced users. Edit ~/.config/spoofdpi/spoofdpi.toml to customize SpoofDPI behavior. CLI flags from this app override TOML values."))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            } header: {
-                Text(String(localized: "Advanced"))
+
+                Section {
+                    Button {
+                        openSpoofDPIConfigFolder()
+                    } label: {
+                        HStack {
+                            Image(systemName: "folder")
+                            Text(String(localized: "Open SpoofDPI Config Folder"))
+                        }
+                    }
+                    Text(String(localized: "For advanced users. Edit ~/.config/spoofdpi/spoofdpi.toml to customize SpoofDPI behavior. CLI flags from this app override TOML values."))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } header: {
+                    Text(String(localized: "Advanced"))
+                }
             }
 
-            Section {
-                InstallationStatusView()
-            } header: {
-                Text(String(localized: "Installation Status"))
-            }
         }
         .formStyle(.grouped)
+        .task { refreshTpwsStatus() }
     }
 
     /// Open ~/.config/spoofdpi/ in Finder. Creates the folder + sample TOML if missing.
@@ -250,6 +320,60 @@ struct BypassSettingsView: View {
         }
     }
 
+    /// Localized helper text for the currently selected engine.
+    private var engineDescription: String {
+        switch appState.bypassEngine {
+        case .spoofDPI:
+            return String(localized: "Userspace HTTP proxy. No admin needed. May break apps with strict TLS (e.g. Discord desktop updater).")
+        case .tpws:
+            return String(localized: "Transparent TCP proxy via Zapret. Needs one-time admin install. Better app compatibility (Discord updater works).")
+        }
+    }
+
+    private func refreshTpwsStatus() {
+        Task {
+            tpwsInstalled = await BypassService.shared.checkTpwsInstalled()
+        }
+    }
+
+    private func installZapret() {
+        tpwsBusy = true
+        Task {
+            defer { tpwsBusy = false }
+            do {
+                try await BypassService.shared.tpws.install()
+                appState.addLog("Zapret service installed.", level: .info)
+            } catch {
+                appState.addLog("Install failed: \(error.localizedDescription)", level: .error)
+            }
+            refreshTpwsStatus()
+        }
+    }
+
+    private func uninstallZapret() {
+        tpwsBusy = true
+        Task {
+            defer { tpwsBusy = false }
+            do {
+                try await BypassService.shared.tpws.uninstall()
+                appState.addLog("Zapret service uninstalled.", level: .info)
+            } catch {
+                appState.addLog("Uninstall failed: \(error.localizedDescription)", level: .error)
+            }
+            refreshTpwsStatus()
+        }
+    }
+
+    /// Localized helper text for the currently selected bypass mode.
+    private var modeDescription: String {
+        switch appState.bypassMode {
+        case .aggressive:
+            return String(localized: "Maximum bypass strength. Required for strict DPI (Turkey). May break some apps' built-in updaters.")
+        case .compatible:
+            return String(localized: "Lighter fragmentation using SpoofDPI defaults. Better app compatibility (e.g. Discord updater) but may fail against strict DPI.")
+        }
+    }
+
     /// Debounced reconnect: wait 1.5s after the last edit, then reconnect if currently active.
     private func scheduleReconnectIfNeeded() {
         portReconnectTask?.cancel()
@@ -265,53 +389,6 @@ struct BypassSettingsView: View {
     }
 }
 
-// MARK: - Installation Status
-struct InstallationStatusView: View {
-    @State private var spoofDPIInstalled = false
-    @State private var isChecking = true
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("SpoofDPI")
-                Spacer()
-                if isChecking {
-                    ProgressView()
-                        .scaleEffect(0.7)
-                } else {
-                    Image(systemName: spoofDPIInstalled ? "checkmark.circle.fill" : "xmark.circle.fill")
-                        .foregroundStyle(spoofDPIInstalled ? .green : .red)
-                    Text(spoofDPIInstalled ? String(localized: "Installed") : String(localized: "Not Installed"))
-                        .foregroundStyle(.secondary)
-                }
-            }
-
-            if !spoofDPIInstalled && !isChecking {
-                HStack {
-                    Text("brew install spoofdpi")
-                        .font(.caption.monospaced())
-                        .foregroundStyle(.secondary)
-                    Button {
-                        NSPasteboard.general.clearContents()
-                        NSPasteboard.general.setString("brew install spoofdpi", forType: .string)
-                    } label: {
-                        Image(systemName: "doc.on.doc")
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-        }
-        .task {
-            await checkInstallation()
-        }
-    }
-
-    private func checkInstallation() async {
-        isChecking = true
-        spoofDPIInstalled = await BypassService.shared.checkSpoofDPIInstalled()
-        isChecking = false
-    }
-}
 
 // MARK: - Logs View
 struct LogsView: View {

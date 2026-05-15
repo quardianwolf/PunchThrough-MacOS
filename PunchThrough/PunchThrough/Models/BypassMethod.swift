@@ -1,27 +1,5 @@
 import Foundation
 
-enum BypassMethod: String, CaseIterable, Identifiable {
-    case spoofDPI = "SpoofDPI"
-
-    var id: String { rawValue }
-
-    var displayName: String {
-        return "SpoofDPI"
-    }
-
-    var description: String {
-        return String(localized: "Lightweight DPI bypass proxy. Recommended for most users.")
-    }
-
-    var requiresInstallation: Bool {
-        return true
-    }
-
-    var installCommand: String {
-        return "brew install spoofdpi"
-    }
-}
-
 enum DNSServer: String, CaseIterable, Identifiable {
     case google = "Google"
     case cloudflare = "Cloudflare"

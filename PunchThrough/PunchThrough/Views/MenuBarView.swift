@@ -36,7 +36,7 @@ struct MenuBarView: View {
             }
 
             if case .connected = appState.connectionStatus {
-                Text("\(appState.selectedMethod.displayName) • \(appState.effectiveDNS)")
+                Text("\(appState.bypassEngine.displayName) • \(appState.effectiveDNS)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -62,28 +62,12 @@ struct MenuBarView: View {
         .disabled(!appState.connectionStatus.canToggle)
     }
 
-    // MARK: - Method Section
+    // MARK: - Engine Section (read-only — change via Settings)
     private var methodSection: some View {
-        Menu {
-            ForEach(BypassMethod.allCases) { method in
-                Button {
-                    appState.selectedMethod = method
-                } label: {
-                    HStack {
-                        Text(method.displayName)
-                        if appState.selectedMethod == method {
-                            Spacer()
-                            Image(systemName: "checkmark")
-                        }
-                    }
-                }
-            }
-        } label: {
-            HStack {
-                Text(String(localized: "Method:"))
-                Text(appState.selectedMethod.displayName)
-                    .foregroundStyle(.secondary)
-            }
+        HStack {
+            Text(String(localized: "Engine:"))
+            Text(appState.bypassEngine.displayName)
+                .foregroundStyle(.secondary)
         }
     }
 

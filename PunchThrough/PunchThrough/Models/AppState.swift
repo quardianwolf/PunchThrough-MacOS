@@ -8,7 +8,6 @@ final class AppState {
     var isProcessing: Bool = false
 
     // MARK: - Configuration (persisted to UserDefaults)
-    var selectedMethod: BypassMethod = .spoofDPI
     var dnsServer: DNSServer {
         didSet { UserDefaults.standard.set(dnsServer.rawValue, forKey: Keys.dnsServer) }
     }
@@ -38,6 +37,12 @@ final class AppState {
     var logLevel: LogLevelOption {
         didSet { UserDefaults.standard.set(logLevel.rawValue, forKey: Keys.logLevel) }
     }
+    var bypassMode: BypassModeOption {
+        didSet { UserDefaults.standard.set(bypassMode.rawValue, forKey: Keys.bypassMode) }
+    }
+    var bypassEngine: BypassEngineOption {
+        didSet { UserDefaults.standard.set(bypassEngine.rawValue, forKey: Keys.bypassEngine) }
+    }
     var launchAtLogin: Bool = false
     var appLanguage: AppLanguage = AppLanguage.current()
 
@@ -53,6 +58,8 @@ final class AppState {
         static let enableSystemProxy = "enableSystemProxy"
         static let autoConnect = "autoConnect"
         static let logLevel = "logLevel"
+        static let bypassMode = "bypassMode"
+        static let bypassEngine = "bypassEngine"
     }
 
     // MARK: - Init (loads persisted settings)
@@ -84,6 +91,22 @@ final class AppState {
             self.logLevel = level
         } else {
             self.logLevel = .info
+        }
+
+        // Default bypass mode: aggressive (matches prior v1.x behavior for Turkish DPI)
+        if let saved = defaults.string(forKey: Keys.bypassMode),
+           let mode = BypassModeOption(rawValue: saved) {
+            self.bypassMode = mode
+        } else {
+            self.bypassMode = .aggressive
+        }
+
+        // Default engine: SpoofDPI (mevcut akış, no admin needed)
+        if let saved = defaults.string(forKey: Keys.bypassEngine),
+           let engine = BypassEngineOption(rawValue: saved) {
+            self.bypassEngine = engine
+        } else {
+            self.bypassEngine = .spoofDPI
         }
     }
 
@@ -197,6 +220,43 @@ enum AppLanguage: String, CaseIterable, Identifiable {
             return .system
         }
         return AppLanguage.allCases.first { $0.rawValue == first } ?? .system
+    }
+}
+
+/// Bypass engine selection.
+/// - spoofDPI: userspace HTTP proxy, no admin needed. May break apps with strict TLS validation
+///   (e.g. Discord desktop updater).
+/// - tpws: transparent TCP proxy via zapret. Needs one-time admin install. TLS payload stays
+///   intact so apps like Discord's Squirrel updater keep working.
+enum BypassEngineOption: String, CaseIterable, Identifiable {
+    case spoofDPI
+    case tpws
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .spoofDPI: return "SpoofDPI"
+        case .tpws: return "Zapret (tpws)"
+        }
+    }
+}
+
+/// Aggressive: maximum bypass strength (chunk-size=1, disorder, random split). Required for
+///   strict DPI environments (e.g. Turkey).
+/// Compatible: SpoofDPI built-in defaults (chunk-size=35, sni split). Works for most apps
+///   including Discord desktop updater, but may not bypass strict DPI.
+enum BypassModeOption: String, CaseIterable, Identifiable {
+    case aggressive
+    case compatible
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .aggressive: return String(localized: "Aggressive")
+        case .compatible: return String(localized: "Compatible")
+        }
     }
 }
 

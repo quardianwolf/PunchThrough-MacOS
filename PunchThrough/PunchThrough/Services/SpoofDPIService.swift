@@ -37,6 +37,7 @@ actor SpoofDPIService {
         enableDoH: Bool,
         enableSystemProxy: Bool,
         logLevel: String = "info",
+        bypassMode: String = "aggressive",
         appState: AppState
     ) async throws {
         log("=== START ATTEMPT ===")
@@ -93,16 +94,32 @@ actor SpoofDPIService {
             log("Using user TOML config: \(userConfigPath)")
         }
 
+        // Mode-specific fragmentation flags.
+        // Aggressive: chunk-size=1 + disorder + random + policy-auto (strong bypass; may break
+        //   apps that download from strict CDNs e.g. Discord desktop updater).
+        // Compatible: rely on SpoofDPI defaults (chunk-size=35, sni split). Most apps work,
+        //   but stricter DPI environments may not be bypassed.
+        let isAggressive = bypassMode == "aggressive"
+        let modeFlagsEnhanced: [String]
+        let modeFlagsBasic: [String]
+        if isAggressive {
+            modeFlagsEnhanced = ["--https-disorder", "--https-chunk-size", "1",
+                                 "--https-split-mode", "random", "--policy-auto"]
+            modeFlagsBasic = ["--https-disorder", "--https-chunk-size", "1",
+                              "--https-split-mode", "random"]
+        } else {
+            // Compatible — keep SpoofDPI built-in defaults, no aggressive overrides.
+            modeFlagsEnhanced = ["--policy-auto"]
+            modeFlagsBasic = []
+        }
+        log("Bypass mode: \(bypassMode)")
+
         // Build argument sets - try enhanced flags first, fall back to basic
         var enhancedArgs: [String] = configArgs + [
             "--listen-addr", "127.0.0.1:\(port)",
             "--dns-addr", "\(dnsAddress):53",
-            "--log-level", logLevel,
-            "--https-disorder",
-            "--https-chunk-size", "1",
-            "--https-split-mode", "random",
-            "--policy-auto"
-        ]
+            "--log-level", logLevel
+        ] + modeFlagsEnhanced
         if enableDoH {
             enhancedArgs.append(contentsOf: ["--dns-mode", "https"])
         }
@@ -110,11 +127,8 @@ actor SpoofDPIService {
         var basicArgs: [String] = configArgs + [
             "--listen-addr", "127.0.0.1:\(port)",
             "--dns-addr", "\(dnsAddress):53",
-            "--log-level", logLevel,
-            "--https-disorder",
-            "--https-chunk-size", "1",
-            "--https-split-mode", "random"
-        ]
+            "--log-level", logLevel
+        ] + modeFlagsBasic
         if enableDoH {
             basicArgs.append(contentsOf: ["--dns-mode", "https"])
         }

@@ -51,7 +51,7 @@ struct MenuBarContent: View {
                 Text(appState.statusText)
             }
             if case .connected = appState.connectionStatus {
-                Text("SpoofDPI • \(appState.effectiveDNS)")
+                Text("\(appState.bypassEngine.displayName) • \(appState.effectiveDNS)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
