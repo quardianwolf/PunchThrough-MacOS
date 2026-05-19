@@ -22,7 +22,7 @@ struct SettingsView: View {
                 }
         }
         .environment(appState)
-        .frame(width: 500, height: 350)
+        .frame(minWidth: 600, minHeight: 420)
     }
 }
 

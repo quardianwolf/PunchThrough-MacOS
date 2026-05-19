@@ -32,7 +32,8 @@ struct PunchThroughApp: App {
                 .environment(appState)
         }
         .windowStyle(.hiddenTitleBar)
-        .defaultSize(width: 500, height: 400)
+        .defaultSize(width: 640, height: 480)
+        .windowResizability(.contentMinSize)
     }
 }
 
