@@ -16,6 +16,11 @@ struct SettingsView: View {
                     Label(String(localized: "Bypass"), systemImage: "network.badge.shield.half.filled")
                 }
 
+            TunnelSettingsView()
+                .tabItem {
+                    Label(String(localized: "Tunnel"), systemImage: "point.topleft.down.to.point.bottomright.curvepath")
+                }
+
             LogsView()
                 .tabItem {
                     Label(String(localized: "Logs"), systemImage: "doc.text")
@@ -101,6 +106,16 @@ struct GeneralSettingsView: View {
                         Text(appState.effectiveDNS)
                             .foregroundStyle(.secondary)
                     }
+
+                    if !appState.tunnelStatusText.isEmpty {
+                        HStack(alignment: .top) {
+                            Text(String(localized: "Tunnel"))
+                            Spacer()
+                            Text(appState.tunnelStatusText)
+                                .foregroundStyle(appState.tunnelActive ? Color.secondary : Color.red)
+                                .multilineTextAlignment(.trailing)
+                        }
+                    }
                 }
             } header: {
                 Text(String(localized: "Connection"))
@@ -110,7 +125,7 @@ struct GeneralSettingsView: View {
                 HStack {
                     Text("PunchThrough for macOS")
                     Spacer()
-                    Text("v1.0.0")
+                    Text("v" + (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""))
                         .foregroundStyle(.secondary)
                 }
 

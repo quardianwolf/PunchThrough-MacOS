@@ -24,6 +24,8 @@
 		AABBCCDD00000001 /* spoofdpi in Resources */ = {isa = PBXBuildFile; fileRef = AABBCCDD00000002 /* spoofdpi */; };
 		AABBCCDD00000003 /* zapret in Resources */ = {isa = PBXBuildFile; fileRef = AABBCCDD00000004 /* zapret */; };
 		AABBCCDD00000005 /* TpwsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABBCCDD00000006 /* TpwsService.swift */; };
+		AABBCCDD00000007 /* TunnelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABBCCDD00000008 /* TunnelService.swift */; };
+		AABBCCDD00000009 /* TunnelSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABBCCDD0000000A /* TunnelSettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +50,8 @@
 		AABBCCDD00000002 /* spoofdpi */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = spoofdpi; sourceTree = "<group>"; };
 		AABBCCDD00000004 /* zapret */ = {isa = PBXFileReference; lastKnownFileType = folder; path = zapret; sourceTree = "<group>"; };
 		AABBCCDD00000006 /* TpwsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TpwsService.swift; sourceTree = "<group>"; };
+		AABBCCDD00000008 /* TunnelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunnelService.swift; sourceTree = "<group>"; };
+		AABBCCDD0000000A /* TunnelSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TunnelSettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +110,7 @@
 			children = (
 				001A000A289A0001 /* MenuBarView.swift */,
 				001A000C289A0001 /* SettingsView.swift */,
+				AABBCCDD0000000A /* TunnelSettingsView.swift */,
 				001A000E289A0001 /* StatusIndicator.swift */,
 			);
 			path = Views;
@@ -118,6 +123,7 @@
 				001A0012289A0001 /* ProcessManager.swift */,
 				001A0014289A0001 /* SpoofDPIService.swift */,
 				AABBCCDD00000006 /* TpwsService.swift */,
+				AABBCCDD00000008 /* TunnelService.swift */,
 				001A001D289A0001 /* HelperConnection.swift */,
 				001A001F289A0001 /* HelperProtocol.swift */,
 			);
@@ -228,6 +234,8 @@
 				001A0011289A0001 /* ProcessManager.swift in Sources */,
 				001A0013289A0001 /* SpoofDPIService.swift in Sources */,
 				AABBCCDD00000005 /* TpwsService.swift in Sources */,
+				AABBCCDD00000007 /* TunnelService.swift in Sources */,
+				AABBCCDD00000009 /* TunnelSettingsView.swift in Sources */,
 				001A001C289A0001 /* HelperConnection.swift in Sources */,
 				001A001E289A0001 /* HelperProtocol.swift in Sources */,
 			);
@@ -393,7 +401,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.punchthrough.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -421,7 +429,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.punchthrough.macos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

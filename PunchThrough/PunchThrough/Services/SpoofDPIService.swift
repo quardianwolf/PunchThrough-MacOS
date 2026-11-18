@@ -307,30 +307,11 @@ actor SpoofDPIService {
         return .failed
     }
 
+    /// Every enabled network service, whatever it is called. Adapter names differ from Mac to
+    /// Mac ("Wi-Fi", "Ethernet", "USB 10/100/1000 LAN", "AX88179A 2", a dock's name...), so a
+    /// fixed list of names silently skipped the adapter the user was actually connected through.
     private func getActiveNetworkServices() -> [String] {
-        // Get list of network services
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/sbin/networksetup")
-        process.arguments = ["-listallnetworkservices"]
-
-        let pipe = Pipe()
-        process.standardOutput = pipe
-
-        try? process.run()
-        process.waitUntilExit()
-
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let output = String(data: data, encoding: .utf8) ?? ""
-
-        // Parse services, skip first line (header) and asterisk-prefixed disabled services
-        let services = output.components(separatedBy: "\n")
-            .dropFirst()
-            .filter { !$0.isEmpty && !$0.hasPrefix("*") }
-            .map { $0.trimmingCharacters(in: .whitespaces) }
-
-        // Return common active services
-        let priorityServices = ["Wi-Fi", "Ethernet", "USB 10/100/1000 LAN"]
-        return services.filter { priorityServices.contains($0) }
+        AutoProxy.services()
     }
 
     func stop(appState: AppState, disableProxy: Bool = true) async {

@@ -8,6 +8,8 @@ final class BypassService {
 
     private let spoofDPI = SpoofDPIService()
     let tpws = TpwsService()
+    private let tunnel = TunnelService()
+    private weak var tunnelAppState: AppState?
 
     private init() {}
 
@@ -33,6 +35,11 @@ final class BypassService {
         case .tpws:
             await connectTpws(appState: appState)
         }
+
+        // The tunnel is an extra: its failure is reported but does not take the bypass down
+        if case .connected = appState.connectionStatus {
+            await startTunnel(appState: appState)
+        }
     }
 
     func disconnect(appState: AppState) async {
@@ -40,6 +47,10 @@ final class BypassService {
 
         appState.connectionStatus = .disconnecting
         appState.addLog("Stopping bypass...")
+
+        await tunnel.stop()
+        appState.tunnelActive = false
+        appState.tunnelStatusText = ""
 
         // Stop whichever engine could be running. Cheap to call both.
         await spoofDPI.stop(appState: appState)
@@ -49,6 +60,57 @@ final class BypassService {
 
         appState.connectionStatus = .disconnected
         appState.addLog("Disconnected successfully")
+    }
+
+    // MARK: - SSH tunnel
+
+    /// Apply changed tunnel settings without restarting the DPI bypass.
+    func restartTunnel(appState: AppState) async {
+        guard case .connected = appState.connectionStatus else { return }
+        await startTunnel(appState: appState)
+    }
+
+    private func startTunnel(appState: AppState) async {
+        guard appState.tunnelMode != .off else {
+            await tunnel.stop()
+            appState.tunnelActive = false
+            appState.tunnelStatusText = ""
+            return
+        }
+
+        tunnelAppState = appState
+        await tunnel.setHandlers(
+            onLog: { [weak self] message, level in
+                Task { @MainActor in self?.tunnelAppState?.addLog(message, level: level) }
+            },
+            onLost: { [weak self] reason in
+                Task { @MainActor in
+                    guard let state = self?.tunnelAppState else { return }
+                    state.tunnelActive = false
+                    state.tunnelStatusText = String(localized: "Failed: \(reason)")
+                    state.addLog("Tunnel lost and could not reconnect: \(reason)", level: .error)
+                }
+            })
+
+        appState.tunnelActive = false
+        appState.tunnelStatusText = String(localized: "Connecting...")
+        appState.addLog("Opening tunnel to \(appState.tunnelHost)...")
+
+        do {
+            try await tunnel.start(config: appState.tunnelConfig)
+
+            var summary = appState.tunnelMode.displayName
+            if let exit = try? await tunnel.queryExit() {
+                summary += " — \(exit.ip) (\(exit.country))"
+            }
+            appState.tunnelActive = true
+            appState.tunnelStatusText = summary
+            appState.addLog("Tunnel active — \(summary)")
+        } catch {
+            appState.tunnelActive = false
+            appState.tunnelStatusText = String(localized: "Failed: \(error.localizedDescription)")
+            appState.addLog("Tunnel failed: \(error.localizedDescription)", level: .error)
+        }
     }
 
     // MARK: - SpoofDPI engine

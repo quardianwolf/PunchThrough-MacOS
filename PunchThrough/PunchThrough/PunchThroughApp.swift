@@ -2,10 +2,14 @@ import SwiftUI
 
 @main
 struct PunchThroughApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @State private var appState = AppState()
     @State private var showSettings = false
 
     init() {
+        // A previous run that crashed may have left our proxy script configured
+        AutoProxy.recoverIfNeeded()
+
         // Auto-connect on launch if enabled (default ON for new installs)
         let state = AppState()
         if state.autoConnect {
@@ -37,6 +41,14 @@ struct PunchThroughApp: App {
     }
 }
 
+/// Quitting must not leave an orphaned ssh behind, or browsers pointing at a proxy
+/// script that no longer exists.
+final class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationWillTerminate(_ notification: Notification) {
+        TunnelRuntime.emergencyCleanup()
+    }
+}
+
 struct MenuBarContent: View {
     let appState: AppState
     @Binding var showSettings: Bool
@@ -55,6 +67,11 @@ struct MenuBarContent: View {
                 Text("\(appState.bypassEngine.displayName) • \(appState.effectiveDNS)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                if !appState.tunnelStatusText.isEmpty {
+                    Text(String(localized: "Tunnel: \(appState.tunnelStatusText)"))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
         .padding(.vertical, 4)

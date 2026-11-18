@@ -44,6 +44,40 @@ final class AppState {
         didSet { UserDefaults.standard.set(bypassEngine.rawValue, forKey: Keys.bypassEngine) }
     }
     var launchAtLogin: Bool = false
+
+    // MARK: - SSH tunnel (persisted; changed together from Settings → Tunnel)
+    var tunnelMode: TunnelMode {
+        didSet { UserDefaults.standard.set(tunnelMode.rawValue, forKey: Keys.tunnelMode) }
+    }
+    var tunnelHost: String {
+        didSet { UserDefaults.standard.set(tunnelHost, forKey: Keys.tunnelHost) }
+    }
+    var tunnelPort: Int {
+        didSet { UserDefaults.standard.set(tunnelPort, forKey: Keys.tunnelPort) }
+    }
+    var tunnelUser: String {
+        didSet { UserDefaults.standard.set(tunnelUser, forKey: Keys.tunnelUser) }
+    }
+    var tunnelKeyPath: String {
+        didSet { UserDefaults.standard.set(tunnelKeyPath, forKey: Keys.tunnelKeyPath) }
+    }
+    var tunnelDomains: [String] {
+        didSet { UserDefaults.standard.set(tunnelDomains, forKey: Keys.tunnelDomains) }
+    }
+
+    /// Human readable tunnel state; empty when the tunnel is off. Not persisted.
+    var tunnelStatusText: String = ""
+    var tunnelActive: Bool = false
+
+    /// Tunnel settings as stored. Sites that are not tunnelled keep using the DPI bypass:
+    /// with SpoofDPI that means the local proxy, with tpws (transparent) a direct connection.
+    var tunnelConfig: TunnelConfig {
+        let usesLocalProxy = bypassEngine == .spoofDPI && enableSystemProxy
+        return TunnelConfig(
+            mode: tunnelMode, host: tunnelHost, port: tunnelPort, user: tunnelUser,
+            keyPath: tunnelKeyPath, domains: tunnelDomains,
+            fallback: usesLocalProxy ? "PROXY 127.0.0.1:\(spoofDPIPort); DIRECT" : "DIRECT")
+    }
     var appLanguage: AppLanguage = AppLanguage.current()
 
     // MARK: - Logs
@@ -60,6 +94,12 @@ final class AppState {
         static let logLevel = "logLevel"
         static let bypassMode = "bypassMode"
         static let bypassEngine = "bypassEngine"
+        static let tunnelMode = "tunnelMode"
+        static let tunnelHost = "tunnelHost"
+        static let tunnelPort = "tunnelPort"
+        static let tunnelUser = "tunnelUser"
+        static let tunnelKeyPath = "tunnelKeyPath"
+        static let tunnelDomains = "tunnelDomains"
     }
 
     // MARK: - Init (loads persisted settings)
@@ -108,6 +148,15 @@ final class AppState {
         } else {
             self.bypassEngine = .spoofDPI
         }
+
+        // Tunnel: off until the user sets it up
+        self.tunnelMode = defaults.string(forKey: Keys.tunnelMode).flatMap(TunnelMode.init(rawValue:)) ?? .off
+        self.tunnelHost = defaults.string(forKey: Keys.tunnelHost) ?? ""
+        let savedTunnelPort = defaults.integer(forKey: Keys.tunnelPort)
+        self.tunnelPort = savedTunnelPort > 0 ? savedTunnelPort : 22
+        self.tunnelUser = defaults.string(forKey: Keys.tunnelUser) ?? ""
+        self.tunnelKeyPath = defaults.string(forKey: Keys.tunnelKeyPath) ?? ""
+        self.tunnelDomains = defaults.stringArray(forKey: Keys.tunnelDomains) ?? []
     }
 
     // MARK: - Computed Properties

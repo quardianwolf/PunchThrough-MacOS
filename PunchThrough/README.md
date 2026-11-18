@@ -21,6 +21,10 @@ A native macOS menu bar application that bypasses DPI (Deep Packet Inspection) r
 - **Multi-language** — English, Turkish, French (selectable in Settings)
 - **Auto-connect on launch** + **Launch at login**
 
+## Tunnel (sites that block your country)
+
+Some sites are not blocked by your ISP — they refuse your country themselves, and DPI bypass cannot help. **Settings > Tunnel** sends just those sites (or all browser traffic) through a server of your own over SSH, with a guided setup that checks every step. See the [step-by-step guide](../README.md#tunnel-open-sites-that-block-your-country).
+
 ## Requirements
 
 - macOS 14.0 (Sonoma) or later
